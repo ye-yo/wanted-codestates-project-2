@@ -1,14 +1,17 @@
+import { memo } from 'react';
 import styled from 'styled-components';
-import { SelectOption } from 'interfaces/search';
+import { ISelectOption } from 'interfaces/search';
 
-interface Props {
-  options: readonly SelectOption[];
+interface ISelectType {
+  options: readonly ISelectOption[];
+  onChange: (target: ISelectOption) => void;
 }
 
-function SelectType({ options }: Props) {
+function SelectType({ options, onChange }: ISelectType) {
+  const handleChangeOption = (e: { target: HTMLSelectElement }) => onChange(options[Number(e.target.value)]);
   return (
     <SelectWrap>
-      <Select>
+      <Select onChange={handleChangeOption}>
         {options.map(({ id, name }, index) => (
           <Option key={id} value={index}>
             {name}
@@ -19,7 +22,7 @@ function SelectType({ options }: Props) {
   );
 }
 
-export default SelectType;
+export default memo(SelectType);
 const SelectWrap = styled.div`
   width: 100px;
   padding: 4.8px 0 4.8px 10px;
