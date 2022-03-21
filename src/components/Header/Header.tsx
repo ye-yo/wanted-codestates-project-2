@@ -12,6 +12,7 @@ function Header() {
 }
 
 const HeaderWrap = styled.header`
+  background-color: white;
   > * {
     max-width: 1000px;
     margin: 0 auto;
