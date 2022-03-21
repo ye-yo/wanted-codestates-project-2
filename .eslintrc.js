@@ -36,5 +36,6 @@ module.exports = {
     'jsx-a11y/no-noninteractive-element-interactions': 0,
     'no-unused-vars': 'off', // typescript type 명시 위해 추가
     '@typescript-eslint/no-unused-vars': ['error'], // typescript type 명시 위해 추가
+    'react/react-in-jsx-scope': 0, // React import문 생략
   },
 };
