@@ -34,5 +34,7 @@ module.exports = {
     'react/prop-types': 0,
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'jsx-a11y/no-noninteractive-element-interactions': 0,
+    'no-unused-vars': 'off', // typescript type 명시 위해 추가
+    '@typescript-eslint/no-unused-vars': ['error'], // typescript type 명시 위해 추가
   },
 };
