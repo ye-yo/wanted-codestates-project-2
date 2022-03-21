@@ -20,8 +20,16 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
+  a{
+    text-decoration: none;
+  }
+
   button{
     border: none;
+  }
+
+  li{
+    list-style: none;
   }
 `;
 export default GlobalStyle;
