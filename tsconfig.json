@@ -18,5 +18,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["./src/**/*"] //타입 선언 라이브러리 @types/ 라이브러리가 제공되지 않는 외부 라이브러리를 위해 설정
 }
