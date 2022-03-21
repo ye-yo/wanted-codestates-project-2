@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { MENU_LIST } from 'constants/header';
@@ -18,8 +17,9 @@ function Menu() {
 export default Menu;
 
 const Wrapper = styled.nav`
+  position: relative;
   height: 56px;
-  margin-left: 20px;
+  z-index: 10;
 `;
 
 const MenuItem = styled.li`

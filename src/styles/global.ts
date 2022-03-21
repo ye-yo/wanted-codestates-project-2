@@ -16,12 +16,19 @@ const GlobalStyle = createGlobalStyle`
     color: #1f334a;
   }
   
+  #root{
+    min-width: 500px;
+    height: 100%;
+    background-color: #fafafa;
+  }
+  
   button, a, svg{
     cursor: pointer;
   }
 
   a{
     text-decoration: none;
+    color: inherit;
   }
 
   button{

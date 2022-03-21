@@ -1,21 +1,21 @@
-import React from 'react';
 import styled from 'styled-components';
 import Info from './Info';
 import Menu from './Menu';
 
 function Header() {
   return (
-    <Wrapper>
+    <HeaderWrap>
       <Info />
       <Menu />
-    </Wrapper>
+    </HeaderWrap>
   );
 }
 
-export default Header;
-
-const Wrapper = styled.header`
-  width: 100%;
-  background-color: black;
-  z-index: 110;
+const HeaderWrap = styled.header`
+  > * {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 `;
+
+export default Header;

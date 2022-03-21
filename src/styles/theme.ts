@@ -23,10 +23,16 @@ const color = {
   red: '#f62459',
   green: '#9bd728',
   gray: '#6c7a89',
+  lightgray: '#fafafa',
+};
+
+const size = {
+  infoHeight: '48px',
 };
 
 const theme = {
   color,
+  size,
   ...media,
 };
 
