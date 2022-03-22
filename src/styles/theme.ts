@@ -20,6 +20,7 @@ const media = (Object.keys(sizes) as Array<keyof typeof sizes>).reduce((acc, lab
 const color = {
   font: '#1f334a',
   main: '#07f',
+  darkMain: '#1456c4',
   red: '#f62459',
   green: '#9bd728',
   gray: '#6c7a89',
@@ -28,6 +29,8 @@ const color = {
 
 const size = {
   infoHeight: '48px',
+  menuHeight: '56px',
+  headerHeight: `${48 + 56}px`,
 };
 
 const theme = {

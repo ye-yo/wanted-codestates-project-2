@@ -6,9 +6,9 @@ import Search from 'components/Home/Search';
 function Home() {
   return (
     <Wrapper>
-      <Background>
+      <Background className="background">
         <Filter />
-        <Main>
+        <Main className="inner">
           <Title />
           <Search />
         </Main>
@@ -35,15 +35,10 @@ const Filter = styled.div`
   opacity: 0.3;
 `;
 const Background = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
-  margin-top: -55px;
-  text-align: center;
   background: url(${NEXON_TMI}/img/main_bg1.png) 50% / cover repeat;
-  overflow: hidden;
 `;
 
 const Main = styled.div`
   position: relative;
+  text-align: center;
 `;

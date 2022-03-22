@@ -33,6 +33,7 @@ const GlobalStyle = createGlobalStyle`
 
   button{
     border: none;
+    line-height: 0;
   }
 
   li{
