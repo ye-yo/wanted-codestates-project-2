@@ -1,8 +1,9 @@
-import styled, { keyframes, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { IoMdRefresh } from 'react-icons/io';
 import { AiFillAlert, AiOutlineLoading } from 'react-icons/ai';
 import { GiShare } from 'react-icons/gi';
 import { FiDownload } from 'react-icons/fi';
+import { rotate } from 'styles/animations';
 
 export default function ButtonWrap() {
   const loading = false;
@@ -64,12 +65,6 @@ const Button = styled.button`
     margin-right: 4px;
     line-height: 0;
     vertical-align: sub;
-  }
-`;
-
-const rotate = keyframes`
-  100% {
-    transform: rotate(360deg);
   }
 `;
 

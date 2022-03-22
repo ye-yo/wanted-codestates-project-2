@@ -33,6 +33,7 @@ const Wrapper = styled.div`
   border-radius: 2rem;
   position: relative;
   height: ${({ height }: { height: string }) => height};
+  margin: 4px 0;
 `;
 
 interface IFill {

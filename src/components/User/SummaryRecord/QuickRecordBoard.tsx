@@ -7,7 +7,7 @@ import RecordBoard from './RecordBoard';
 const title = { emphasis: '한눈에 보기' };
 const datas: IDatas = {
   data: [2, 3],
-  color: ['#07f', '#f62459'],
+  color: ['#0077ff', '#f62459'],
 };
 const labels = ['2승', '3패'];
 function QuickRecordBoard() {
@@ -109,12 +109,12 @@ const BoxWrap = styled.div`
     `}
 `;
 
-const Title = styled.p`
+const Title = styled.div`
   font-size: 1.4em;
   font-weight: 500;
 `;
 
-const Score = styled.p`
+const Score = styled.div`
   font-size: 2.4em;
   font-weight: bold;
   color: ${({ theme }) => theme.color.main};

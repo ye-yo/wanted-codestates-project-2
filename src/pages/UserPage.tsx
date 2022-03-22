@@ -5,20 +5,31 @@ import ApiInfo from 'components/User/ApiInfo';
 
 function UserPage() {
   return (
-    <Background className="background">
+    <Wrapper>
+      <Background className="background" />
       <Inner className="inner">
         <ApiInfo />
         <User.Profile />
         <User.SummaryRecord />
+        <User.TabRecord />
       </Inner>
-    </Background>
+    </Wrapper>
   );
 }
 
 export default UserPage;
+const Wrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  position: relative;
+`;
 
 const Background = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   background: url(${NEXON_TMI}/img/main_bg1.png) 50% / cover repeat;
+  filter: brightness(0.9);
 `;
 
 const Inner = styled.div`

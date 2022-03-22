@@ -19,7 +19,7 @@ const media = (Object.keys(sizes) as Array<keyof typeof sizes>).reduce((acc, lab
 
 const color = {
   font: '#1f334a',
-  main: '#07f',
+  main: '#0077ff',
   darkMain: '#1456c4',
   red: '#f62459',
   green: '#9bd728',

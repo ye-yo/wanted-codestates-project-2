@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Character from './Profile/Character';
 import ButtonWrap from './Profile/ButtonWrap';
 import SubProfile from './Profile/SubProfile';
+import MatchTypeWrap from './Profile/MatchTypeWrap';
 
 export default function Profile() {
   return (
@@ -18,6 +19,7 @@ export default function Profile() {
         <ButtonWrap />
         <Info>최근 업데이트 : 352시간 전</Info>
       </Block>
+      <MatchTypeWrap />
     </Wrapper>
   );
 }
@@ -28,6 +30,7 @@ const Wrapper = styled.section`
   padding: 2rem 0;
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
+  position: relative;
 `;
 const Name = styled.h1`
   display: inline-block;
