@@ -27,12 +27,12 @@ const Wrapper = styled.section`
   display: flex;
   padding: 2rem 0;
   background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 `;
 const Name = styled.h1`
   display: inline-block;
   font-size: 2.4em;
   font-weight: bold;
-  color: white;
   margin: 0 10px 1rem 0;
 `;
 const License = styled.img`

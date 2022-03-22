@@ -6,17 +6,17 @@ function Content({ children }: { children: Element | ReactElement | null }) {
 }
 
 const ContentWrap = styled.main`
-  height: ${({ theme }) => `calc(100% - ${theme.size.headerHeight})`};
+  min-height: ${({ theme }) => `calc(100% - 1px - ${theme.size.infoHeight})`};
+  height: max-content;
   > div {
     height: 100%;
   }
 
   .background {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 1px - ${({ theme }) => theme.size.infoHeight});
     position: relative;
     margin-top: -55px;
-    overflow: hidden;
   }
 
   .inner {

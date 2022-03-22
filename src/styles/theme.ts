@@ -25,6 +25,7 @@ const color = {
   green: '#9bd728',
   gray: '#6c7a89',
   lightgray: '#fafafa',
+  borderLightMain: '#0164ff73',
 };
 
 const size = {

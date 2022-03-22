@@ -21,7 +21,7 @@ export default Home;
 
 const Wrapper = styled.section`
   width: 100%;
-  height: calc(90% - ${({ theme }) => theme.size.infoHeight});
+  height: calc(90vh - ${({ theme }) => theme.size.infoHeight});
   font-size: 1.2rem;
   color: white;
 `;

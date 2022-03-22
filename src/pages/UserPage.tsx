@@ -9,6 +9,7 @@ function UserPage() {
       <Inner className="inner">
         <ApiInfo />
         <User.Profile />
+        <User.SummaryRecord />
       </Inner>
     </Background>
   );
@@ -23,5 +24,7 @@ const Background = styled.div`
 const Inner = styled.div`
   height: auto;
   font-size: 1.2rem;
-  color: white;
+  > section {
+    margin-bottom: 2rem;
+  }
 `;
