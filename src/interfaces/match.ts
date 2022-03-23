@@ -1,6 +1,14 @@
-export type IMatchList = IMatch[];
+// export type IMatchList = IMatch[];
 export type ICardList = ICard[];
 
+export interface IMatchList {
+  nickname: string;
+  matches: IMatchDTO[];
+}
+export interface IMatchDTO {
+  matchType: string;
+  matches: IMatch[];
+}
 export interface IMatch {
   accountNo: string;
   matchId: string;

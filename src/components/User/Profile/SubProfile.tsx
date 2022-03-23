@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface ISubProfile {
-  level: string;
+  level: number;
   views: string;
 }
 export default function SubProfile({ level, views }: ISubProfile) {

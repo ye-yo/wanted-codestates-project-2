@@ -1,24 +1,43 @@
+import { useEffect, useState } from 'react';
 import { NEXON_TMI } from 'constants/env';
 import styled from 'styled-components';
+import { useAppSelector } from 'store/config';
 import Character from './Profile/Character';
 import ButtonWrap from './Profile/ButtonWrap';
 import SubProfile from './Profile/SubProfile';
 import MatchTypeWrap from './Profile/MatchTypeWrap';
 
+const getLastDateString = (date: string) => {
+  console.log(date);
+  return '몇 초 전 ';
+};
 export default function Profile() {
+  const { user, lastUpdate } = useAppSelector((state) => state.user);
+  const [lastUpdateText, setLastUpdateText] = useState<string>();
+  useEffect(() => {
+    if (lastUpdate) {
+      setLastUpdateText(getLastDateString(lastUpdate));
+    }
+  }, [lastUpdate, setLastUpdateText]);
+
+  // https: const user = await dispatch(getUser(value));
   return (
     <Wrapper>
-      <Block>
-        <Character img="/character.png" />
-      </Block>
-      <Block right>
-        <Name>배찌</Name>
-        <License alt="라이센스" src={`${NEXON_TMI}/img/icon_l3.png`} />
-        <SubProfile level="140" views="25" />
-        {/* <Ranking>종합랭킹 1,174위</Ranking> */}
-        <ButtonWrap />
-        <Info>최근 업데이트 : 352시간 전</Info>
-      </Block>
+      {user && (
+        <>
+          <Block>
+            <Character img="/character.png" />
+          </Block>
+          <Block right>
+            <Name>{user.name}</Name>
+            <License alt="라이센스" src={`${NEXON_TMI}/img/icon_l3.png`} />
+            <SubProfile level={user.level} views="25" />
+            {/* <Ranking>종합랭킹 1,174위</Ranking> */}
+            <ButtonWrap />
+            <Info>최근 업데이트 : {lastUpdateText}</Info>
+          </Block>
+        </>
+      )}
       <MatchTypeWrap />
     </Wrapper>
   );
@@ -52,7 +71,7 @@ const Block = styled.div`
       }
   `}
 `;
-// const Ranking = styled.div``;
 const Info = styled.p`
   font-size: 0.88em;
+  word-spacing: 1px;
 `;

@@ -37,5 +37,6 @@ module.exports = {
     'no-unused-vars': 'off', // typescript type 명시 위해 추가
     '@typescript-eslint/no-unused-vars': ['error'], // typescript type 명시 위해 추가
     'react/react-in-jsx-scope': 0, // React import문 생략
+    'no-param-reassign': [2, { props: false }], // redux-toolkit reducer 작성 시 state 재할당 오류 발생 문제 무시
   },
 };
