@@ -6,6 +6,8 @@ import { SEARCH_OPTIONS } from 'constants/search';
 import { useNavigate } from 'react-router-dom';
 import { FaUserAlt } from 'react-icons/fa';
 import useAutoSearch from 'hooks/useAutoSearch';
+import { useAppDispatch } from 'store/config';
+import { getUser } from 'services/userService';
 import SelectType from './SelectType';
 
 const keywordList = [
@@ -19,21 +21,28 @@ const keywordList = [
 const optionIcons = [<FaUserAlt />];
 
 function Search() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchOption, setSearchOption] = useState<ISelectOption>(SEARCH_OPTIONS[0]);
   const optionIcon = useMemo(() => optionIcons[searchOption.id], [searchOption]);
   const [keyword, setKeyWord] = useState('');
   const { matchList } = useAutoSearch(keyword, keywordList, 'name');
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const value = keyword.trim();
     if (value === '') {
       alert('검색어를 입력해주세요.');
       return;
     }
-    navigate(`/${searchOption.value}?${value}`);
+    const user = await dispatch(getUser(value));
+    if (user.payload) {
+      navigate(`/${searchOption.value}?${value}`);
+    } else {
+      alert('존재하지 않는 사용자입니다.');
+    }
   };
+
   const handleChangeType = useCallback(
     (target: ISelectOption) => {
       setSearchOption(target);

@@ -10,8 +10,19 @@ interface UserStateType {
   user: IUser | null;
   loading: boolean;
   error: string;
+  lastUpdate: Date | null;
 }
-const initialState: UserStateType = { user: null, loading: false, error: '' };
+// const initialState: UserStateType = { user: null, loading: false, error: '', lastUpdate: null };
+const initialState: UserStateType = {
+  user: {
+    accessId: '604675539',
+    level: 16,
+    name: '다이스x',
+  },
+  loading: false,
+  error: '',
+  lastUpdate: new Date(),
+};
 
 export const userSlice = createSlice({
   name: 'user',
@@ -25,6 +36,7 @@ export const userSlice = createSlice({
     builder
       .addCase(getUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.lastUpdate = new Date();
       })
       .addCase(getUser.rejected, (state) => {
         state.user = null;
