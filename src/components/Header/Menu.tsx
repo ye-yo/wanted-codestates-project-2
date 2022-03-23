@@ -7,7 +7,9 @@ function Menu() {
     <Wrapper>
       {MENU_LIST.map(({ id, name, link }) => (
         <MenuItem key={id}>
-          <NavLink to={link}>{name}</NavLink>
+          <NavLink className="item" to={link}>
+            {name}
+          </NavLink>
         </MenuItem>
       ))}
     </Wrapper>
@@ -22,18 +24,16 @@ const Wrapper = styled.nav`
   z-index: 10;
 `;
 
-const MenuItem = styled.li`
+export const HoverItem = styled.li`
   display: inline-block;
-  height: 100%;
-  margin-right: 1rem;
   width: 120px;
   line-height: 56px;
   font-size: 1.2rem;
-  a {
+  .item {
+    cursor: pointer;
     display: block;
     color: white;
     width: 80px;
-    height: 100%;
     text-align: center;
     position: relative;
     opacity: 0.5;
@@ -56,11 +56,15 @@ const MenuItem = styled.li`
       }
     }
   }
+`;
 
-  &:hover a {
-    &:hover {
-      opacity: 1;
-    }
+const MenuItem = styled(HoverItem)`
+  height: 100%;
+  .item {
+    height: 100%;
+  }
+  &:hover .item {
+    opacity: 1;
     &:after {
       width: 100%;
       transition: all 0.15s ease-in-out;

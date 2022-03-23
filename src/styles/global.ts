@@ -14,6 +14,9 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
     font-size: 12px;
     color: #1f334a;
+    font-family: Noto Sans KR;
+    letter-spacing: -1px;
+    font-weight: 400;
   }
   
   #root{
@@ -33,6 +36,7 @@ const GlobalStyle = createGlobalStyle`
 
   button{
     border: none;
+    line-height: 0;
   }
 
   li{
