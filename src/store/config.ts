@@ -3,10 +3,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'; // configure
 // 기존 리덕스의 번거로운 기본 설정 과정을 자동화하는 것인
 import { createLogger } from 'redux-logger';
 import userSlice from './slices/userSlice';
+import matchListSlice from './slices/matchListSlice';
 
 const logger = createLogger();
 const rootReducer = combineReducers({
   user: userSlice.reducer,
+  matchList: matchListSlice.reducer,
 });
 const initialState = {};
 export const store = configureStore({

@@ -7,7 +7,7 @@ import ButtonWrap from './Profile/ButtonWrap';
 import SubProfile from './Profile/SubProfile';
 import MatchTypeWrap from './Profile/MatchTypeWrap';
 
-const getLastDateString = (date: Date) => {
+const getLastDateString = (date: string) => {
   console.log(date);
   return '몇 초 전 ';
 };

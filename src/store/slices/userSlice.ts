@@ -10,7 +10,7 @@ interface UserStateType {
   user: IUser | null;
   loading: boolean;
   error: string;
-  lastUpdate: Date | null;
+  lastUpdate: string | null;
 }
 // const initialState: UserStateType = { user: null, loading: false, error: '', lastUpdate: null };
 const initialState: UserStateType = {
@@ -21,7 +21,7 @@ const initialState: UserStateType = {
   },
   loading: false,
   error: '',
-  lastUpdate: new Date(),
+  lastUpdate: new Date().toString(),
 };
 
 export const userSlice = createSlice({
@@ -36,7 +36,7 @@ export const userSlice = createSlice({
     builder
       .addCase(getUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.lastUpdate = new Date();
+        state.lastUpdate = new Date().toString();
       })
       .addCase(getUser.rejected, (state) => {
         state.user = null;
