@@ -1,42 +1,70 @@
-import { useState, useEffect } from 'react';
+import { useReducer } from 'react';
 import axios from 'axios';
 import { API_BASE_URL, NEXON_TMI_KEY } from 'constants/env';
 
-const useAxios = <T>(
-  url: string,
-  params?: object,
-): {
-  result: T | null;
+interface IState {
   loading: boolean;
-  error: Error | null;
-} => {
-  const [result, setResult] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+  data: any;
+  error: any;
+}
 
-  useEffect(() => {
-    const fetch = async (): Promise<void> => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await axios({
-          method: 'get',
-          url: API_BASE_URL + url,
-          data: params,
-          headers: {
-            Authorization: NEXON_TMI_KEY,
-          },
-        });
-        setLoading(false);
-        setResult(response.data);
-      } catch (err: any) {
-        setError(err);
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, [url]);
+type IAction = {
+  type: string;
+  data?: any;
+  error?: any;
+};
 
-  return { result, loading, error };
+const reducer = (state: IState, action: IAction): IState => {
+  switch (action.type) {
+    case 'LOADING':
+      return {
+        loading: true,
+        data: null,
+        error: null,
+      };
+    case 'SUCCESS':
+      return {
+        loading: false,
+        data: action.data,
+        error: null,
+      };
+    case 'ERROR':
+      return {
+        loading: false,
+        data: null,
+        error: action.error,
+      };
+    default:
+      throw new Error(`Unhandled action type: ${action.type}`);
+  }
+};
+
+const defaultState = {
+  loading: false,
+  data: null,
+  error: false,
+};
+
+const useAxios = () => {
+  const [state, dispatch] = useReducer(reducer, defaultState);
+
+  const fetchData = async (url: string, params?: object): Promise<void> => {
+    dispatch({ type: 'LOADING' });
+    try {
+      const data = await axios({
+        method: 'get',
+        url: API_BASE_URL + url,
+        data: params,
+        headers: {
+          Authorization: NEXON_TMI_KEY,
+        },
+      });
+      dispatch({ type: 'SUCCESS', data });
+    } catch (err: any) {
+      dispatch({ type: 'ERROR', error: err });
+    }
+  };
+
+  return [state, fetchData];
 };
 export default useAxios;
