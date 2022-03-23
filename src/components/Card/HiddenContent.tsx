@@ -35,8 +35,6 @@ export default function HiddenContent({ open }: { open: boolean }) {
 }
 
 const Wrapper = styled.section`
-  margin-left: 4px;
-  width: calc(100% - 4px);
   background: #ffffff;
   display: ${({ open }: { open: boolean }) => (open ? 'flex' : 'none')};
   transition: ${toggleFold} 2s;

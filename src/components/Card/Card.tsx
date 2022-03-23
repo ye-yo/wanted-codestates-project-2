@@ -53,14 +53,34 @@ const Row = styled.div`
   width: 100%;
   display: table;
   min-height: 80px;
-  border-left: 4.8px solid gray;
   position: relative;
-  ${({ win, retired, theme }: IRow) =>
-    css`
-      color: ${retired ? theme.color.red : win && theme.color.main};
-      background-color: ${retired ? theme.color.red : win && theme.color.main}33;
-      border-color: ${retired ? theme.color.red : win && theme.color.main};
-    `}
+  &:before {
+    position: absolute;
+    top: -1px;
+    left: -4px;
+    content: '';
+    display: block;
+    width: 4px;
+    height: calc(100% + 2px);
+    border-style: solid;
+    border-width: 1px 1px 1px 4px;
+  }
+  position: relative;
+  ${({ win, retired, theme }: IRow) => {
+    let color = '#a1a1a1';
+    if (retired) {
+      color = theme.color.red;
+    } else if (win) {
+      color = theme.color.main;
+    }
+    return css`
+      color: ${color};
+      background-color: ${color === '#a1a1a1' ? '#ffffff' : color}33;
+      &:before {
+        border-color: transparent transparent transparent ${color};
+      }
+    `;
+  }}
 `;
 const Item = styled.p`
   flex: 1;

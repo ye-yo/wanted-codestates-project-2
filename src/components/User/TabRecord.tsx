@@ -46,7 +46,7 @@ const Border = styled.div`
   }
 `;
 const TabContent = styled.div`
-  padding-top: 1rem;
+  padding: 1rem 0 6rem;
   display: flex;
   gap: 20px;
 `;

@@ -24,7 +24,6 @@ const ContentWrap = styled.main`
     max-width: 1000px;
     width: 1000px;
     margin: 0 auto;
-    padding-top: ${({ theme }) => theme.size.menuHeight};
     position: relative;
   }
 `;

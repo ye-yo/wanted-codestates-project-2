@@ -14,7 +14,7 @@ export default function MatchHistory() {
 
 const Wrapper = styled.section`
   flex: 2;
-  padding-bottom: 6rem;
+  margin-top: 50px;
 `;
 
 const TabContent = styled.div`
