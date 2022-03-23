@@ -61,11 +61,8 @@ export default function SideRecord() {
     <Wrapper>
       <Tab tabs={SIDE_TABS} currentTab={currentTab} setCurrentTab={handleChangeTab} />
       <TabContent>
-        {currentTab === '트랙' ? (
-          <ContentTrack theads={THEADS_TRACK} datas={datasTrack} />
-        ) : (
-          <ContentKart theads={THEADS_KART} datas={datasKart} />
-        )}
+        <ContentTrack current={currentTab !== '트랙'} theads={THEADS_TRACK} datas={datasTrack} />
+        <ContentKart current={currentTab === '트랙'} theads={THEADS_KART} datas={datasKart} />
       </TabContent>
     </Wrapper>
   );

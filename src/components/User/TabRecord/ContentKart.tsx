@@ -3,6 +3,7 @@ import Table from './Table';
 import { Wrapper, Box, TitleWrap, Title } from './ContentTrack';
 
 interface ITable {
+  current: boolean;
   theads: readonly string[];
   datas: any[];
 }
@@ -22,9 +23,9 @@ const recordList = [
   },
 ];
 
-export default function ContentKart({ theads, datas }: ITable) {
+export default function ContentKart({ current, theads, datas }: ITable) {
   return (
-    <Wrapper>
+    <Wrapper current={current ? 1 : 0}>
       <Box>
         <TitleWrap>
           <Title>

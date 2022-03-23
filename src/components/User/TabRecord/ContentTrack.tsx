@@ -1,14 +1,18 @@
-import styled from 'styled-components';
+import LineChart from 'components/Chart/LineChart';
+import styled, { css } from 'styled-components';
 import Table from './Table';
 
 interface ITable {
+  current: boolean;
   theads: readonly string[];
   datas: any[];
 }
-
-export default function ContentTrack({ theads, datas }: ITable) {
+const dataSample = [1, 6, 3, 1, 2, 3, 4, 8, 4];
+const labels = ['hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi', 'hi'];
+const options = {};
+export default function ContentTrack({ current, theads, datas }: ITable) {
   return (
-    <Wrapper>
+    <Wrapper current={current ? 1 : 0}>
       <Box>
         <TitleWrap>
           <Title>
@@ -22,7 +26,7 @@ export default function ContentTrack({ theads, datas }: ITable) {
           <ChartTitle>
             <span>빌리지 운하</span> 기록 분포
           </ChartTitle>
-          <div>차트차트</div>
+          {dataSample && <LineChart datas={dataSample} labels={labels} options={options} />}
         </ChartWrap>
       </Box>
       <Table theads={theads} datas={datas} />
@@ -34,6 +38,11 @@ export const Wrapper = styled.section`
   flex: 1;
   font-size: 1.2rem;
   gap: 20px;
+  ${({ current }: { current: number }) =>
+    current &&
+    css`
+      display: none;
+    `}
 `;
 export const Box = styled.section`
   padding: 1.6rem;
@@ -64,7 +73,6 @@ const ChartWrap = styled.div`
 const ChartTitle = styled.p`
   color: ${({ theme }) => theme.color.gray};
   margin-bottom: 0.8rem;
-  min-height: 100px;
   span {
     color: black;
   }

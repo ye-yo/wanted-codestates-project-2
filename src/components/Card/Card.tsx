@@ -27,7 +27,7 @@ export default function Card({ data }: ICardProps) {
           </Item>
           <Item className="kart">{data.kart}</Item>
           <Item className="time">{data.time}</Item>
-          <Item className="more" onClick={handleClickCard}>
+          <Item className="more" onClick={handleClickCard} style={{ cursor: 'pointer' }}>
             <IconToggle open={open} />
           </Item>
         </Row>
