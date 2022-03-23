@@ -19,7 +19,7 @@ export interface IMatch {
   endTime: string;
   channelName: string;
   trackId: string;
-  playerCount: string;
+  playerCount: number;
   matchResult: string;
   seasonType: string;
   player: IPlayer;
@@ -54,4 +54,29 @@ export interface ICard {
   total: string;
   win: boolean;
   retired: boolean;
+}
+
+export interface ITotalGame {
+  win: number;
+  retired: number;
+  ranks: Array<string>;
+}
+
+export interface IParsedMatch {
+  matchId: string;
+  matchName: string;
+  teamId: string;
+  date: string;
+  matchTime: string;
+  win: boolean;
+  retired: boolean;
+  rank: string;
+  track: string;
+  kart: string;
+}
+
+export interface ITotalRecord {
+  win: number;
+  retired: number;
+  ranks: Array<any>;
 }
