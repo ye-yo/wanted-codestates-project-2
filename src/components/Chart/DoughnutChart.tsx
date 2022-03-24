@@ -1,3 +1,4 @@
+import { WrapperUI, DoughnutUI, TitleUI, HoleUI } from 'components/Skeletons/DoughnutChartUI';
 import { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { fillColor } from 'styles/animations';
@@ -59,19 +60,9 @@ function DoughnutChart({ percentage, options }: IDoughnutChart) {
   );
 }
 
-const Wrapper = styled.div`
-  flex: 1;
-  font-size: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+const Wrapper = styled(WrapperUI)``;
 
-const Title = styled.p`
-  font-size: 1em;
-  text-align: center;
-  margin-bottom: 2rem;
-`;
+const Title = styled(TitleUI)``;
 
 interface IDoughnut {
   full: number;
@@ -81,11 +72,7 @@ interface IDoughnut {
   color: string;
   circleRadius: number;
 }
-const Doughnut = styled.div`
-  position: relative;
-  flex: 1;
-  border-radius: 50%;
-  background-color: #eeeeee;
+const Doughnut = styled(DoughnutUI)`
   ${({ size, strokeWidth, color }: IDoughnut) => css`
     width: ${size}px;
     height: ${size}px;
@@ -119,15 +106,7 @@ const Doughnut = styled.div`
   }
 `;
 
-const Hole = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background-color: white;
-  z-index: 1;
-`;
+const Hole = styled(HoleUI)``;
 
 const Outer = styled.div`
   width: 100%;

@@ -34,7 +34,13 @@ export default function Profile() {
       {user && (
         <>
           <Block>
-            <Character img={`${NEXON_STORAGE_URL}/character/${matches?.currentUserData.character}.png`} />
+            <Character
+              img={
+                matches?.currentUserData.character
+                  ? `${NEXON_STORAGE_URL}/character/${matches?.currentUserData.character}.png`
+                  : null
+              }
+            />
           </Block>
           <Block right>
             <Name>{user.name}</Name>

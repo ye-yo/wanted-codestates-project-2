@@ -30,5 +30,5 @@ export const DEFAULT_FILTER = {
 
 export const DEFAULT_OPTIONS = {
   offset: 0,
-  limit: 10,
+  limit: 20,
 };

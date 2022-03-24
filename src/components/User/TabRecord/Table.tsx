@@ -14,7 +14,7 @@ export default function Table({ theads, datas, handleSelect }: ITable) {
     handleSelect(id);
   };
   useEffect(() => {
-    if (datas) setSelected(datas[0].id);
+    if (datas && datas[0]) setSelected(datas[0].id);
   }, []);
 
   return (

@@ -9,7 +9,7 @@ import RecordBoard from './RecordBoard';
 const title = { emphasis: '한눈에 보기' };
 
 function QuickRecordBoard() {
-  const { matches } = useAppSelector((state) => state.matchList);
+  const { matches, loading } = useAppSelector((state) => state.matchList);
   const { win, loose, mostMode, rankAverage, datas } = useMemo<ISummaryRecord>(
     () => getSummaryRecord(matches?.matches || null),
     [matches],
@@ -23,7 +23,7 @@ function QuickRecordBoard() {
 
   return (
     <RecordBoard title={title}>
-      <Wrapper>
+      <Wrapper loading={loading}>
         <Box title="전적" score="20" full customScore={customScore}>
           <ProgressBar datas={datas} />
         </Box>
@@ -42,6 +42,7 @@ const Wrapper = styled.div`
   flex-flow: row wrap;
   height: 100%;
   gap: 10px;
+  opacity: ${({ loading }: { loading: boolean }) => loading && '.4'};
 `;
 
 interface IBox {

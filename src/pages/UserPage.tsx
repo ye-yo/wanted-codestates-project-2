@@ -8,7 +8,6 @@ import { getMatchList } from 'services/matchListService';
 
 function UserPage() {
   const { user } = useAppSelector((state) => state.user);
-  const { matches } = useAppSelector((state) => state.matchList);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -19,14 +18,12 @@ function UserPage() {
   return (
     <Wrapper>
       <Background className="background" />
-      {matches && (
-        <Inner className="inner">
-          <ApiInfo />
-          <User.Profile />
-          <User.SummaryRecord />
-          <User.TabRecord />
-        </Inner>
-      )}
+      <Inner className="inner">
+        <ApiInfo />
+        <User.Profile />
+        <User.SummaryRecord />
+        <User.TabRecord />
+      </Inner>
     </Wrapper>
   );
 }

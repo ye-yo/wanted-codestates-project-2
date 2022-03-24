@@ -3,6 +3,7 @@ import { IParsedMatch } from 'interfaces/match';
 import { getMatchList } from 'services/matchListService';
 import { useAppDispatch, useAppSelector } from 'store/config';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
+import CardUI from 'components/Skeletons/CardUI';
 import Card from './Card';
 
 type ObserverType = { unobserve: (arg0: any) => void; observe: (arg0: any) => void; disconnect: () => void };
@@ -12,6 +13,7 @@ export default function CardTable({ datas }: { datas: IParsedMatch[] }) {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const { filter, options, loading, isEnded } = useAppSelector((state) => state.matchList);
+
   const [, setRef] = useInfiniteScroll(
     async (entry: EntryType, observer: ObserverType) => {
       if (isEnded && observer) {
@@ -34,10 +36,11 @@ export default function CardTable({ datas }: { datas: IParsedMatch[] }) {
 
   return (
     <Table>
+      {loading && <CardUI />}
       {datas.map((data: IParsedMatch) => (
         <Card key={data.matchId} data={data} />
       ))}
-      {datas.length > 0 && <Bottom ref={setRef}>로딩중입니다~~~~~~~~~~~~~~</Bottom>}
+      {datas.length > 0 && <Bottom ref={setRef} />}
     </Table>
   );
 }

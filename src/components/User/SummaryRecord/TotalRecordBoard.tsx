@@ -3,6 +3,7 @@ import { useAppSelector } from 'store/config';
 import { getRacePercentage } from 'utils/parser';
 import { useMemo } from 'react';
 import { NEXON_TMI } from 'constants/env';
+import DoughnutChartUI from 'components/Skeletons/DoughnutChartUI';
 import DoughnutChart from '../../Chart/DoughnutChart';
 import RecordBox from './RecordBoard';
 
@@ -19,13 +20,16 @@ function TotalRecordBoard() {
   return (
     <RecordBox title={title}>
       <Wrapper>
-        {matches && !loading && (
-          <ChartWrapper>
-            <DoughnutChart percentage={win} options={options[0]} />
-            <DoughnutChart percentage={complete} options={options[1]} />
-            <DoughnutChart percentage={retired} options={options[2]} />
-          </ChartWrapper>
-        )}
+        <ChartWrapper>
+          {loading && <DoughnutChartUI />}
+          {matches && !loading && (
+            <>
+              <DoughnutChart percentage={win} options={options[0]} />
+              <DoughnutChart percentage={complete} options={options[1]} />
+              <DoughnutChart percentage={retired} options={options[2]} />
+            </>
+          )}
+        </ChartWrapper>
         <Description>
           <img src={`${NEXON_TMI}/img/assets/tmi_logo_default_b.svg`} alt="TMI 로고" />
         </Description>
