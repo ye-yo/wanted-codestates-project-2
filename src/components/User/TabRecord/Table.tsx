@@ -57,7 +57,7 @@ export default function Table({ theads, datas, handleSelect }: ITable) {
 Table.defaultProps = { datas: [] };
 
 const Wrapper = styled.div`
-  padding-bottom: 2rem;
+  padding-bottom: 1.6rem;
   background-color: white;
 `;
 const TableWrapper = styled.table`
@@ -69,6 +69,22 @@ const TableWrapper = styled.table`
     height: 34px;
     background-color: #eeeeee88;
     font-weight: 500;
+    td {
+      position: relative;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 10px;
+        right: 0;
+        display: inline-block;
+        width: 1px;
+        height: 15px;
+        background-color: #ccc;
+      }
+      &:last-child {
+        content: none;
+      }
+    }
   }
   tbody {
     background-color: white;
@@ -89,6 +105,7 @@ const TableWrapper = styled.table`
       }
     }
     td {
+      min-width: 32px;
       :nth-child(2) {
         text-align: left;
         padding-left: 10px;

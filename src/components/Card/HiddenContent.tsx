@@ -40,43 +40,44 @@ function HiddenContent({ open, matchId }: { open: boolean; matchId: string }) {
         <Cell>기록</Cell>
       </Item>
       {players &&
-        arr.map((key, index) => (
-          <BodyItem
-            key={key}
-            win={players[index]?.matchWin === '1'}
-            retired={players[index]?.matchRetired === '1'}
-            current={
-              gameInfo?.isTeam
-                ? gameInfo.win === players[index]?.matchWin
-                : user?.accessId === players[index]?.accountNo
-            }
-          >
-            <Cell>
-              {players[index] ? (
-                <>{players[index].matchRetired !== '1' ? `${players[index].matchRank}위` : '리타이어'} </>
-              ) : (
-                '-'
+        arr.map((key, index) => {
+          const isWin = players[index]?.matchWin === '' ? '0' : players[index]?.matchWin;
+          const retired = players[index]?.matchRetired === '1';
+          const userWin = gameInfo?.win === '' ? '0' : gameInfo?.win;
+          return (
+            <BodyItem
+              key={key}
+              win={isWin === '1'}
+              retired={retired}
+              current={gameInfo?.isTeam ? userWin === isWin : user?.accessId === players[index]?.accountNo}
+            >
+              <Cell>
+                {players[index] ? (
+                  <>{players[index].matchRetired !== '1' ? `${players[index].matchRank}위` : '리타이어'} </>
+                ) : (
+                  '-'
+                )}
+              </Cell>
+              {players[index] && (
+                <>
+                  <Cell>
+                    <img
+                      alt={players[index].characterName}
+                      src={`${NEXON_STORAGE_URL}/kart/${players[index].kart}.png`}
+                      onError={handleKartImgError}
+                    />
+                  </Cell>
+                  <Cell>
+                    <p onClick={() => {}} onKeyDown={() => handleClick(players[index].characterName)}>
+                      {players[index].characterName}
+                    </p>
+                  </Cell>
+                  <Cell> - </Cell>
+                </>
               )}
-            </Cell>
-            {players[index] && (
-              <>
-                <Cell>
-                  <img
-                    alt={players[index].characterName}
-                    src={`${NEXON_STORAGE_URL}/kart/${players[index].kart}.png`}
-                    onError={handleKartImgError}
-                  />
-                </Cell>
-                <Cell>
-                  <p onClick={() => {}} onKeyDown={() => handleClick(players[index].characterName)}>
-                    {players[index].characterName}
-                  </p>
-                </Cell>
-                <Cell> - </Cell>
-              </>
-            )}
-          </BodyItem>
-        ))}
+            </BodyItem>
+          );
+        })}
     </Wrapper>
   );
 }

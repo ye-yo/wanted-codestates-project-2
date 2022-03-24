@@ -56,7 +56,7 @@ const title = { emphasis: '순위변동', text: '추이' };
 
 function RankingGraph() {
   const { matches } = useAppSelector((state) => state.matchList);
-  const { total, latest, datas } = useMemo(() => getRankingGraphRecord(matches), [matches]);
+  const { total, latest, datas } = useMemo(() => getRankingGraphRecord(matches?.matches || null), [matches]);
   const [chartData, setChartData] = useState<any>(null);
   const [summary, setSummary] = useState<any>();
   useEffect(() => {
@@ -74,8 +74,8 @@ function RankingGraph() {
     setChartData(newChartData);
     setSummary(
       <span>
-        지난 {total.count}경기 <Color>{total.rankAverage}위</Color> 최근 {latest.count}경기{' '}
-        <Color>{latest.rankAverage}위</Color>
+        지난 {total.count}경기 <Color>{total.rankAverage || '?'}위</Color> 최근 {latest.count}경기{' '}
+        <Color>{latest.rankAverage || '?'}위</Color>
       </span>,
     );
   }, [datas]);

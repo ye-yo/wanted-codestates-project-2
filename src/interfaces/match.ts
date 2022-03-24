@@ -58,8 +58,7 @@ export interface IUserData {
 export interface IParsedData {
   currentUserData: IUserData;
   matches: IParsedMatch[];
-  summary: ITotalRecord;
-  total: number;
+  originMatches: IParsedMatch[];
 }
 
 export interface ITrackRecord {
@@ -79,10 +78,10 @@ export interface IKartRecord {
 }
 
 export interface ISummaryRecord {
+  win: number;
   loose: number;
   mostMode: string;
   rankAverage: number;
-  labels: string[];
   datas: any;
 }
 

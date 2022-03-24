@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 import { getMatchList } from 'services/matchListService';
 import { IParsedData, IFilter } from 'interfaces/match';
+import { filtering } from 'utils/parser';
 
 interface MatchListStateType {
   matches: IParsedData | null;
@@ -26,13 +27,28 @@ export const matchListSlice = createSlice({
       state.matches = action.payload;
     },
     setGameType: (state, action: PayloadAction<boolean>) => {
-      state.filter.isTeam = action.payload;
+      const filter = { ...state.filter, isTeam: action.payload };
+      state.filter = filter;
+      const currentState = current(state);
+      if (currentState.matches && state.matches) {
+        state.matches.matches = filtering(currentState.matches.originMatches, filter);
+      }
     },
     setChannel: (state, action: PayloadAction<string>) => {
-      state.filter.channel = action.payload;
+      const filter = { ...state.filter, channel: action.payload };
+      state.filter = filter;
+      const currentState = current(state);
+      if (currentState.matches && state.matches) {
+        state.matches.matches = filtering(currentState.matches.originMatches, filter);
+      }
     },
     setShowRetired: (state, action: PayloadAction<boolean>) => {
-      state.filter.showRetired = action.payload;
+      const filter = { ...state.filter, showRetired: action.payload };
+      state.filter = filter;
+      const currentState = current(state);
+      if (currentState.matches && state.matches) {
+        state.matches.matches = filtering(currentState.matches.originMatches, filter);
+      }
     },
   },
   extraReducers: (builder) => {

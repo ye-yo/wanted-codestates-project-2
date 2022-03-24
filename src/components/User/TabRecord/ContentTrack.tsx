@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import LineChart from 'components/Chart/LineChart';
 import styled, { css } from 'styled-components';
 import { useAppSelector } from 'store/config';
@@ -21,6 +21,10 @@ export default function ContentTrack({ current, theads }: ITable) {
   const { matches } = useAppSelector((state) => state.matchList);
   const trackList = useMemo(() => getTrackList(matches?.matches), [matches]);
   const [currentTrack, setCurrentTrack] = useState<ITrackRecord | null>(trackList[0]);
+
+  useEffect(() => {
+    setCurrentTrack(trackList[0] || null);
+  }, [trackList]);
 
   const handleSelect = useCallback(
     (id: string) => {

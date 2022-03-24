@@ -15,7 +15,7 @@ const options = [
 
 function TotalRecordBoard() {
   const { matches, loading } = useAppSelector((state) => state.matchList);
-  const { win, complete, retired } = useMemo(() => getRacePercentage(matches), [matches]);
+  const { win, complete, retired } = useMemo(() => getRacePercentage(matches?.matches || null), [matches]);
   return (
     <RecordBox title={title}>
       <Wrapper>

@@ -12,7 +12,7 @@ export default function MatchTypeWrap() {
   const handleClickType = () => dispatch(setGameType(!filter.isTeam));
   const handleToggle = useCallback(
     (toggle: boolean) => {
-      dispatch(setShowRetired(toggle));
+      dispatch(setShowRetired(!toggle));
     },
     [setShowRetired],
   );

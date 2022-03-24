@@ -1,13 +1,13 @@
 import temp from '../temp.json';
 import {
   IMatch,
-  ITotalRecord,
   IParsedMatch,
   IParsedData,
   IUserData,
   ITrackRecord,
   IKartRecord,
   ISummaryRecord,
+  IFilter,
 } from 'interfaces/match';
 import { IPlayer } from 'interfaces/player';
 import gameType from 'datas/gameType.json';
@@ -47,32 +47,20 @@ const infitialUserData = {
   license: '',
 };
 
-const initialTotalData = {
-  win: 0,
-  retired: 0,
-  ranks: [],
-  startDate: '',
-  lastDate: '',
-};
-
 const data = temp.matches[1].matches;
 export const parseData = (): IParsedData => {
   const matchList: IParsedMatch[] = [];
   let currentUserData: IUserData = infitialUserData;
-  let summary: ITotalRecord = initialTotalData;
 
   data.forEach((match: IMatch) => {
     const { player } = match;
     if (!player.matchRank) return;
     currentUserData = getCurrentUserData(player, currentUserData);
-    summary = getGameResult2(summary, player);
     const parsedMatch = extractData(match);
     matchList.push(parsedMatch);
   });
 
-  summary.startDate = data[0].endTime;
-  summary.lastDate = data[data.length - 1].endTime;
-  return { matches: matchList, summary, currentUserData, total: summary.ranks.length };
+  return { matches: matchList, originMatches: matchList, currentUserData };
 };
 
 const extractData = (match: IMatch): IParsedMatch => {
@@ -88,7 +76,7 @@ const extractData = (match: IMatch): IParsedMatch => {
     playerCount,
     win: matchResult === '1',
     retired: player.matchRetired === '1',
-    rank: +player.matchRank,
+    rank: +player.matchRank > 8 ? 8 : +player.matchRank,
     trackId,
     kartId: player.kart,
     trackName: getIdToName('track', trackId),
@@ -174,21 +162,14 @@ export const getKartList = (matches: IParsedMatch[] | undefined) => {
 };
 
 export const getTrackWithKart = (kartId: string, matches: IParsedMatch[] | undefined) => {
-  if (!matches) return [];
+  if (!matches || matches.length === 0) return [];
   const map = new Map();
-  for (const match of matches) {
+  matches.forEach((match) => {
     if (match.kartId === kartId) {
       map.set(match.trackId, match);
     }
-  }
+  });
   return [...map.values()];
-};
-
-const getGameResult2 = (total: ITotalRecord, { matchWin, matchRetired, matchRank }: IPlayer) => {
-  if (matchWin === '1') total.win += 1;
-  if (matchRetired === '1') total.retired += 1;
-  if (matchRank) total.ranks.push(+matchRank > 8 ? 8 : +matchRank);
-  return total;
 };
 
 export const getGameResult = (list: IParsedMatch[]) => {
@@ -237,56 +218,49 @@ export const Summary = {
     const mostModes = CHANNEL_NAMES.filter((item: string, index: number) => array[index] === maxCount);
     return mostModes.join(',');
   },
-  getRankAverage: (ranks: Array<any>) => {
-    const rankSum = ranks.reduce((sum, cur) => sum + cur, 0);
-    return rankSum / ranks.length;
-  },
-  getLoose: (data: IParsedData) => {
-    if (data && data.total) {
-      return data.total - (data.summary.win || 0);
-    }
-    return 0;
+  getRankAverage: (matchList: IParsedMatch[]) => {
+    const rankSum = matchList.reduce((sum, cur) => sum + cur.rank, 0);
+    return rankSum / matchList.length;
   },
 };
 
-export const getSummaryRecord = (matches: IParsedData | null): ISummaryRecord => {
-  if (matches) {
-    const win = matches?.summary.win || 0;
-    const loose = Summary.getLoose(matches);
+export const getSummaryRecord = (matches: IParsedMatch[] | null): ISummaryRecord => {
+  if (matches && matches.length > 0) {
+    const { win } = getGameResult(matches);
+    const loose = matches.length - win;
     const datas: IDatas = {
       data: [win, loose],
       color: ['#0077ff', '#f62459'],
     };
     return {
+      win,
       loose,
-      mostMode: Summary.getMostMode(matches.matches),
-      rankAverage: Summary.getRankAverage(matches?.summary.ranks),
-      labels: [`${matches?.summary.win || 0}승`, `${loose}`],
+      mostMode: Summary.getMostMode(matches),
+      rankAverage: Summary.getRankAverage(matches),
       datas,
     };
   }
-  return { loose: 0, mostMode: '', rankAverage: 0, labels: [], datas: {} };
+  return { win: 0, loose: 0, mostMode: '', rankAverage: 0, datas: {} };
 };
 
-export const getRankingGraphRecord = (matches: IParsedData | null) => {
-  if (matches) {
-    const ranks = matches?.summary?.ranks;
-    const total = ranks.length > 200 ? 200 : ranks.length;
+export const getRankingGraphRecord = (matches: IParsedMatch[] | null) => {
+  if (matches && matches.length > 0) {
+    const total = matches.length > 200 ? 200 : matches.length;
     const latest = total > 50 ? 50 : total;
-    let totals = ranks.slice(0, total);
+    let totals = matches.slice(0, total);
     const totalRankAverage = Summary.getRankAverage(totals);
     if (latest !== total) {
-      totals = ranks.slice(0, latest);
+      totals = matches.slice(0, latest);
     }
 
     return {
       total: {
-        count: matches.total,
+        count: matches.length,
         rankAverage: totalRankAverage,
       },
       latest: {
         count: latest,
-        rankAverage: latest !== total ? Summary.getRankAverage(ranks.slice(0, latest)) : totalRankAverage,
+        rankAverage: latest !== total ? Summary.getRankAverage(matches.slice(0, latest)) : totalRankAverage,
       },
       datas: totals,
     };
@@ -294,10 +268,10 @@ export const getRankingGraphRecord = (matches: IParsedData | null) => {
   return { total: {}, latest: {}, labels: [], datas: [] };
 };
 
-export const getRacePercentage = (matches: IParsedData | null) => {
+export const getRacePercentage = (matches: IParsedMatch[] | null) => {
   if (!matches) return { win: 0, complete: 0, retired: 0 };
-  const { win, retired } = getGameResult(matches.matches);
-  const total = matches.matches.length;
+  const { win, retired } = getGameResult(matches);
+  const total = matches.length;
   const winPercent = Math.floor((win / total) * 100);
   const retiredPercent = Math.floor((retired / total) * 100);
   const completePercent = 100 - retiredPercent;
@@ -306,4 +280,15 @@ export const getRacePercentage = (matches: IParsedData | null) => {
     complete: completePercent,
     retired: retiredPercent,
   };
+};
+
+export const filtering = (matches: IParsedMatch[], filter: IFilter) =>
+  matches.filter((item) => isMatchedFilter(filter, item));
+
+const isMatchedFilter = (filter: IFilter, item: IParsedMatch) => {
+  const itemIsTeam = item.teamId === '1';
+  if (itemIsTeam !== filter.isTeam) return false;
+  if (item.channelType !== filter.channel) return false;
+  if (!filter.showRetired && item.retired) return false;
+  return true;
 };

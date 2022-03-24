@@ -33,8 +33,10 @@ export default function ContentKart({ current, theads }: ITable) {
   const [currentKart, setCurrentKart] = useState<ICurrentKart | null>(null);
 
   useEffect(() => {
-    setCurrentKart(getKartData(kartList, kartList[0].id, matches?.matches));
-  }, []);
+    if (kartList.length > 0) {
+      setCurrentKart(getKartData(kartList, kartList[0].id, matches?.matches));
+    } else setCurrentKart(null);
+  }, [kartList]);
 
   const handleSelect = useCallback(
     (id: string) => {

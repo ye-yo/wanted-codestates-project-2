@@ -10,15 +10,14 @@ const title = { emphasis: '한눈에 보기' };
 
 function QuickRecordBoard() {
   const { matches } = useAppSelector((state) => state.matchList);
-  const { loose, mostMode, rankAverage, labels, datas } = useMemo<ISummaryRecord>(
-    () => getSummaryRecord(matches),
+  const { win, loose, mostMode, rankAverage, datas } = useMemo<ISummaryRecord>(
+    () => getSummaryRecord(matches?.matches || null),
     [matches],
   );
 
   const customScore = (
     <CustomScore>
-      {matches?.total || 0}전 <span className="blue">{matches?.summary.win || 0}승</span>{' '}
-      <span className="red">{loose}패</span>
+      {matches?.matches.length || 0}전 <span className="blue">{win || 0}승</span> <span className="red">{loose}패</span>
     </CustomScore>
   );
 
@@ -26,7 +25,7 @@ function QuickRecordBoard() {
     <RecordBoard title={title}>
       <Wrapper>
         <Box title="전적" score="20" full customScore={customScore}>
-          <ProgressBar datas={datas} labels={labels} />
+          <ProgressBar datas={datas} />
         </Box>
         <Box title="평균등수" score={rankAverage} unit="위" />
         {/* <Box title="경기수" score="185" unit="경기" /> */}
@@ -81,7 +80,7 @@ function Box({ title, score, unit, full, customScore, children }: IBox) {
       <Score>
         {customScore || (
           <>
-            {score}
+            {score || ''}
             {unit && <Unit>{unit}</Unit>}
           </>
         )}

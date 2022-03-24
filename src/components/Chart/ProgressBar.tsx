@@ -3,7 +3,6 @@ import { IDatas, IOption } from 'interfaces/chart';
 
 interface IProgressBar {
   datas: IDatas;
-  labels: string[];
   options?: IOption;
 }
 const defaultProps = {
@@ -12,14 +11,14 @@ const defaultProps = {
   },
 };
 
-function ProgressBar({ datas, labels, options }: IProgressBar) {
-  console.log(labels);
+function ProgressBar({ datas, options }: IProgressBar) {
   return (
     <Wrapper height={options?.height || '10px'}>
-      {datas.data.map((data, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <Fill key={index} weight={data} color={datas.color[index]} />
-      ))}
+      {datas.data &&
+        datas.data.map((data, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <Fill key={index} weight={data} color={datas.color[index]} />
+        ))}
     </Wrapper>
   );
 }
