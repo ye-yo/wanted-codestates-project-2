@@ -22,7 +22,7 @@ const getKartData = (kartList: IKartRecord[], id: string, matches: IParsedMatch[
   const kartData = kartList.filter((item) => item.id === id);
   const kart = {
     ...kartData[0],
-    tracks: getTrackWithKart(id, matches),
+    tracks: getTrackWithKart(id, matches).slice(0, 4),
   };
   return kart;
 };

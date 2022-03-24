@@ -42,7 +42,7 @@ export default function Table({ theads, datas, handleSelect }: ITable) {
                     return (
                       <td key={index}>
                         {value?.img && <img src={value.img} alt={value.name} />}
-                        <span>{value?.name ? value.name : value}</span>
+                        <span>{value?.name !== undefined ? value.name : value}</span>
                       </td>
                     );
                   })}
@@ -59,6 +59,8 @@ Table.defaultProps = { datas: [] };
 const Wrapper = styled.div`
   padding-bottom: 1.6rem;
   background-color: white;
+  max-height: 320px;
+  overflow-y: auto;
 `;
 const TableWrapper = styled.table`
   font-size: 1.1rem;

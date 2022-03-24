@@ -4,7 +4,6 @@ import { useAppSelector } from 'store/config';
 
 export default function MatchHistory() {
   const { matches } = useAppSelector((state) => state.matchList);
-
   return (
     <Wrapper>
       <TabContent>{matches?.matches && <CardTable datas={matches.matches} />}</TabContent>

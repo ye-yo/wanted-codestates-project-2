@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components';
-import { IDatas, IOption } from 'interfaces/chart';
+import { IDatas, IChartOption } from 'interfaces/chart';
 
 interface IProgressBar {
   datas: IDatas;
-  options?: IOption;
+  options?: IChartOption;
 }
 const defaultProps = {
   options: {

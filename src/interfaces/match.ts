@@ -95,3 +95,14 @@ interface ITableNameColumn {
   name: string;
   img: string;
 }
+
+export interface IOPtions {
+  offset: number;
+  limit: number;
+}
+
+export interface IUpdateMatches {
+  datas: IParsedData;
+  filter?: IFilter;
+  options?: IOPtions;
+}

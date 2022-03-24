@@ -1,19 +1,23 @@
 import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 import { getMatchList } from 'services/matchListService';
-import { IParsedData, IFilter } from 'interfaces/match';
+import { IParsedData, IFilter, IOPtions, IUpdateMatches } from 'interfaces/match';
 import { filtering } from 'utils/parser';
-import { DEFAULT_FILTER } from 'constants/match';
+import { DEFAULT_FILTER, DEFAULT_OPTIONS } from 'constants/match';
 
 interface MatchListStateType {
   matches: IParsedData | null;
   filter: IFilter;
+  options: IOPtions;
   loading: boolean;
+  isEnded: boolean;
   error: string;
 }
 const initialState: MatchListStateType = {
   matches: null,
+  options: DEFAULT_OPTIONS,
   filter: DEFAULT_FILTER,
   loading: false,
+  isEnded: false,
   error: '',
 };
 export const matchListSlice = createSlice({
@@ -54,7 +58,23 @@ export const matchListSlice = createSlice({
         state.loading = true;
       })
       .addCase(getMatchList.fulfilled, (state, action) => {
-        state.matches = action.payload;
+        const { datas, options, filter }: IUpdateMatches = action.payload;
+        if (options && state.matches) {
+          const { originMatches, matches } = datas;
+          const currentState = current(state);
+          const prevMatches = currentState.matches?.matches || [];
+          const prevOriginMatches = currentState.matches?.originMatches || [];
+          state.matches.matches = [...prevMatches, ...matches];
+          state.matches.originMatches = [...prevOriginMatches, ...originMatches];
+        } else {
+          state.matches = datas;
+        }
+        if (options !== undefined) state.options = options;
+        if (filter !== undefined) state.filter = filter;
+        if (datas.matches.length === 0) state.isEnded = true;
+        else {
+          state.isEnded = false;
+        }
         state.loading = false;
       })
       .addCase(getMatchList.rejected, (state) => {

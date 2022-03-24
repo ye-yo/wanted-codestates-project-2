@@ -2,6 +2,6 @@ export interface IDatas {
   data: any[];
   color: string[];
 }
-export interface IOption {
+export interface IChartOption {
   height: string;
 }

@@ -5,7 +5,6 @@ import ApiInfo from 'components/User/ApiInfo';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/config';
 import { getMatchList } from 'services/matchListService';
-import { DEFAULT_FILTER } from 'constants/match';
 
 function UserPage() {
   const { user } = useAppSelector((state) => state.user);
@@ -14,7 +13,7 @@ function UserPage() {
 
   useEffect(() => {
     if (user) {
-      dispatch(getMatchList({ accessId: user.accessId, filter: DEFAULT_FILTER }));
+      dispatch(getMatchList({ accessId: user.accessId }));
     }
   }, []);
   return (

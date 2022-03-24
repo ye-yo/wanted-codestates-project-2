@@ -129,8 +129,9 @@ const Item = styled.p`
   &.more {
     width: 60px;
   }
-  &.track:after,&.kart:after{
-    content: "";
+  &.track:after,
+  &.kart:after {
+    content: '';
     position: absolute;
     display: inline-block;
     top: 38px;
@@ -138,7 +139,6 @@ const Item = styled.p`
     width: 1px;
     height: 16px;
     background-color: #ebebeb;
-}
   }
 `;
 

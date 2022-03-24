@@ -1,4 +1,3 @@
-import temp from '../temp.json';
 import {
   IMatch,
   IParsedMatch,
@@ -47,13 +46,12 @@ const infitialUserData = {
   license: '',
 };
 
-const data = temp.matches[1].matches;
-export const parseData = (filter: IFilter): IParsedData => {
+export const parseData = (datas: IMatch[], filter: IFilter): IParsedData => {
   let currentUserData: IUserData = infitialUserData;
   const matches: IParsedMatch[] = [];
   const originMatches: IParsedMatch[] = [];
 
-  data.forEach((match: IMatch) => {
+  datas.forEach((match: IMatch) => {
     const { player } = match;
     if (!player.matchRank) return;
     currentUserData = getCurrentUserData(player, currentUserData);
@@ -224,7 +222,7 @@ export const Summary = {
   },
   getRankAverage: (matchList: IParsedMatch[]) => {
     const rankSum = matchList.reduce((sum, cur) => sum + cur.rank, 0);
-    return rankSum / matchList.length;
+    return (rankSum / matchList.length).toFixed(1);
   },
 };
 
@@ -240,7 +238,7 @@ export const getSummaryRecord = (matches: IParsedMatch[] | null): ISummaryRecord
       win,
       loose,
       mostMode: Summary.getMostMode(matches),
-      rankAverage: Summary.getRankAverage(matches),
+      rankAverage: +Summary.getRankAverage(matches),
       datas,
     };
   }

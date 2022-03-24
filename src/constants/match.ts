@@ -27,3 +27,8 @@ export const DEFAULT_FILTER = {
   channel: '통합',
   showRetired: true,
 };
+
+export const DEFAULT_OPTIONS = {
+  offset: 0,
+  limit: 10,
+};

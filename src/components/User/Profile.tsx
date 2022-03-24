@@ -39,7 +39,7 @@ export default function Profile() {
           <Block right>
             <Name>{user.name}</Name>
             <License alt="라이센스" src={`${NEXON_TMI}/img/icon_l3.png`} />
-            <SubProfile level={user.level} views="25" />
+            <SubProfile level={user.level} views="?" />
             {/* <Ranking>종합랭킹 1,174위</Ranking> */}
             <ButtonWrap />
             <Info>최근 업데이트 : {lastUpdateText}</Info>
