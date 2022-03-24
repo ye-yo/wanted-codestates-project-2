@@ -48,19 +48,23 @@ const infitialUserData = {
 };
 
 const data = temp.matches[1].matches;
-export const parseData = (): IParsedData => {
-  const matchList: IParsedMatch[] = [];
+export const parseData = (filter: IFilter): IParsedData => {
   let currentUserData: IUserData = infitialUserData;
+  const matches: IParsedMatch[] = [];
+  const originMatches: IParsedMatch[] = [];
 
   data.forEach((match: IMatch) => {
     const { player } = match;
     if (!player.matchRank) return;
     currentUserData = getCurrentUserData(player, currentUserData);
     const parsedMatch = extractData(match);
-    matchList.push(parsedMatch);
+    originMatches.push(parsedMatch);
+    if (isMatchedFilter(filter, parsedMatch)) {
+      matches.push(parsedMatch);
+    }
   });
 
-  return { matches: matchList, originMatches: matchList, currentUserData };
+  return { matches, originMatches, currentUserData };
 };
 
 const extractData = (match: IMatch): IParsedMatch => {
@@ -245,17 +249,18 @@ export const getSummaryRecord = (matches: IParsedMatch[] | null): ISummaryRecord
 
 export const getRankingGraphRecord = (matches: IParsedMatch[] | null) => {
   if (matches && matches.length > 0) {
-    const total = matches.length > 200 ? 200 : matches.length;
+    const ranks = matches.map((match) => +match.rank);
+    const total = ranks.length > 200 ? 200 : ranks.length;
     const latest = total > 50 ? 50 : total;
-    let totals = matches.slice(0, total);
-    const totalRankAverage = Summary.getRankAverage(totals);
+    let totals = ranks.slice(0, total);
+    const totalRankAverage = Summary.getRankAverage(matches);
     if (latest !== total) {
-      totals = matches.slice(0, latest);
+      totals = ranks.slice(0, latest);
     }
 
     return {
       total: {
-        count: matches.length,
+        count: ranks.length,
         rankAverage: totalRankAverage,
       },
       latest: {
@@ -282,8 +287,9 @@ export const getRacePercentage = (matches: IParsedMatch[] | null) => {
   };
 };
 
-export const filtering = (matches: IParsedMatch[], filter: IFilter) =>
-  matches.filter((item) => isMatchedFilter(filter, item));
+export const filtering = (matches: IParsedMatch[], filter: IFilter) => {
+  return matches.filter((item) => isMatchedFilter(filter, item));
+};
 
 const isMatchedFilter = (filter: IFilter, item: IParsedMatch) => {
   const itemIsTeam = item.teamId === '1';

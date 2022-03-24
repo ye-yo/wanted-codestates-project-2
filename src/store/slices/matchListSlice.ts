@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 import { getMatchList } from 'services/matchListService';
 import { IParsedData, IFilter } from 'interfaces/match';
 import { filtering } from 'utils/parser';
+import { DEFAULT_FILTER } from 'constants/match';
 
 interface MatchListStateType {
   matches: IParsedData | null;
@@ -11,11 +12,7 @@ interface MatchListStateType {
 }
 const initialState: MatchListStateType = {
   matches: null,
-  filter: {
-    isTeam: false,
-    channel: '통합',
-    showRetired: true,
-  },
+  filter: DEFAULT_FILTER,
   loading: false,
   error: '',
 };

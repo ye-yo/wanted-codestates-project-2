@@ -12,21 +12,26 @@ interface IDoughnutChart {
 }
 
 const STROKE_WIDTH = 12;
-const getStrokeDashOffset = (full: number, percent: number) => {
-  return full * (1 - percent / 360);
+const getStrokeDashOffset = (full: number, percent: number, radiusSize: number) => {
+  const offset = full * (1 - percent / 100);
+  const weight = radiusSize / 5;
+  if (offset === full) return offset;
+  const offset2 = offset + weight;
+  return offset2 > full ? full - 0.1 : offset2;
 };
 
 function DoughnutChart({ percentage, options }: IDoughnutChart) {
   const parentRef = useRef<HTMLDivElement>(null);
-  const [doughnutOptions, setDoughnutOptions] = useState({ size: 100, full: 500, offset: 500 });
+  const [doughnutOptions, setDoughnutOptions] = useState({ size: 100, full: 500, offset: 500, circleRadius: 250 });
 
   useEffect(() => {
     if (parentRef?.current) {
       const size = parentRef?.current.clientWidth;
       const diameter = size - STROKE_WIDTH;
       const full = diameter * Math.PI;
-      const offset = getStrokeDashOffset(full, percentage);
-      setDoughnutOptions({ size, full, offset });
+      const circleRadius = size / 2 - STROKE_WIDTH / 2;
+      const offset = getStrokeDashOffset(full, percentage, circleRadius);
+      setDoughnutOptions({ size, full, offset, circleRadius });
     }
   }, []);
 
@@ -40,6 +45,7 @@ function DoughnutChart({ percentage, options }: IDoughnutChart) {
         offset={doughnutOptions.offset}
         strokeWidth={STROKE_WIDTH}
         size={doughnutOptions.size}
+        circleRadius={doughnutOptions.circleRadius}
       >
         <Hole className="hole">
           <Text>{percentage || 0}%</Text>
@@ -73,6 +79,7 @@ interface IDoughnut {
   strokeWidth: number;
   size: number;
   color: string;
+  circleRadius: number;
 }
 const Doughnut = styled.div`
   position: relative;
@@ -97,12 +104,12 @@ const Doughnut = styled.div`
   circle {
     transform-origin: center;
     fill: none;
-    transform: rotate(-90deg); // 시작지점을 위로
     stroke-linecap: round;
-    ${({ size, color, full, offset, strokeWidth }: IDoughnut) => css`
+    ${({ size, color, full, offset, strokeWidth, circleRadius }: IDoughnut) => css`
+      transform: ${`rotate(-${90 - Math.floor(circleRadius / 4)}deg)`}; // 시작지점을 위로
       cx: ${size / 2};
       cy: ${size / 2};
-      r: ${size / 2 - STROKE_WIDTH / 2};
+      r: ${circleRadius};
       stroke: ${color};
       stroke-width: ${strokeWidth}px;
       stroke-dasharray: ${full}; //점선 //원둘레
