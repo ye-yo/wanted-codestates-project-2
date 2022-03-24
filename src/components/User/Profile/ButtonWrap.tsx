@@ -4,12 +4,22 @@ import { AiFillAlert, AiOutlineLoading } from 'react-icons/ai';
 import { GiShare } from 'react-icons/gi';
 import { FiDownload } from 'react-icons/fi';
 import { rotate } from 'styles/animations';
+import { useAppDispatch, useAppSelector } from 'store/config';
+import { getMatchList } from 'services/matchListService';
 
 export default function ButtonWrap() {
-  const loading = false;
+  const { user } = useAppSelector((state) => state.user);
+  const { filter, loading } = useAppSelector((state) => state.matchList);
+  const dispatch = useAppDispatch();
+  const handleClickRefresh = () => {
+    if (user) {
+      dispatch(getMatchList({ accessId: user.accessId, filter }));
+    }
+  };
+
   return (
     <Wrapper>
-      <Button>
+      <Button onClick={handleClickRefresh}>
         {loading ? <IconRotate /> : <IoMdRefresh />}
         전적갱신
       </Button>

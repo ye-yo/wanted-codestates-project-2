@@ -3,6 +3,7 @@ import { NEXON_TMI, NEXON_STORAGE_URL } from 'constants/env';
 import styled from 'styled-components';
 import { useAppSelector } from 'store/config';
 import { convertRelativeDate } from 'utils/date';
+import useInterval from 'hooks/useInterval';
 import Character from './Profile/Character';
 import ButtonWrap from './Profile/ButtonWrap';
 import SubProfile from './Profile/SubProfile';
@@ -21,6 +22,12 @@ export default function Profile() {
       setLastUpdateText(getLastDateString(lastUpdate));
     }
   }, [lastUpdate, setLastUpdateText]);
+
+  useInterval(() => {
+    if (lastUpdate) {
+      setLastUpdateText(getLastDateString(lastUpdate));
+    }
+  }, 60000);
 
   return (
     <Wrapper>
