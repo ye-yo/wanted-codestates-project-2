@@ -1,4 +1,4 @@
-// export type IMatchList = IMatch[];
+import { IPlayer } from './player';
 
 export interface IMatchList {
   nickname: string;
@@ -22,25 +22,6 @@ export interface IMatch {
   matchResult: string;
   seasonType: string;
   player: IPlayer;
-}
-
-export interface IPlayer {
-  accountNo: string;
-  characterName: string;
-  character: string;
-  kart: string;
-  license: string;
-  pet: string;
-  flyingPet: string;
-  partsEngine: string;
-  partsHandle: string;
-  partsWheel: string;
-  partsKit: string;
-  rankinggrade2: string;
-  matchRank: string;
-  matchRetired: string;
-  matchWin: string;
-  matchTime: string;
 }
 
 export interface IParsedMatch {
@@ -67,11 +48,13 @@ export interface ITotalRecord {
   startDate: string;
   lastDate: string;
 }
+
 export interface IUserData {
   character: string;
   characterName: string;
   license: string;
 }
+
 export interface IParsedData {
   currentUserData: IUserData;
   matches: IParsedMatch[];

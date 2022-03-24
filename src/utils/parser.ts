@@ -1,7 +1,6 @@
 import temp from '../temp.json';
 import {
   IMatch,
-  IPlayer,
   ITotalRecord,
   IParsedMatch,
   IParsedData,
@@ -10,6 +9,7 @@ import {
   IKartRecord,
   ISummaryRecord,
 } from 'interfaces/match';
+import { IPlayer } from 'interfaces/player';
 import gameType from 'datas/gameType.json';
 import characterData from 'datas/character.json';
 import trackData from 'datas/track.json';

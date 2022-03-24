@@ -35,7 +35,7 @@ function Card({ data }: ICardProps) {
           </Item>
         </Row>
       </WhiteBoard>
-      <HiddenContent open={open} />
+      <HiddenContent open={open} matchId={data.matchId} />
     </CardWrap>
   );
 }
