@@ -11,6 +11,7 @@ import MatchTypeWrap from './Profile/MatchTypeWrap';
 const getLastDateString = (date: string) => {
   return convertRelativeDate(new Date(), date);
 };
+
 export default function Profile() {
   const { user, lastUpdate } = useAppSelector((state) => state.user);
   const { matches } = useAppSelector((state) => state.matchList);

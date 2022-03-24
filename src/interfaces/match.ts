@@ -1,5 +1,4 @@
 // export type IMatchList = IMatch[];
-export type ICardList = ICard[];
 
 export interface IMatchList {
   nickname: string;
@@ -44,29 +43,21 @@ export interface IPlayer {
   matchTime: string;
 }
 
-export interface ICard {
-  id: string;
-  kart: string;
-  track: string;
-  time: string;
-  date: string;
-  rank: string;
-  total: string;
-  win: boolean;
-  retired: boolean;
-}
-
 export interface IParsedMatch {
   matchId: string;
   matchName: string;
+  channelType: string;
   teamId: string;
   date: string;
-  matchTime: string;
+  record: string;
   win: boolean;
   retired: boolean;
-  rank: string;
-  track: string;
-  kart: string;
+  rank: number;
+  trackId: string;
+  kartId: string;
+  trackName: string;
+  kartName: string;
+  playerCount: number;
 }
 
 export interface ITotalRecord {
@@ -83,34 +74,25 @@ export interface IUserData {
 }
 export interface IParsedData {
   currentUserData: IUserData;
+  matches: IParsedMatch[];
   summary: ITotalRecord;
-  matchHistoryData: IMatchHistoryData;
   total: number;
 }
 
 export interface ITrackRecord {
-  trackId: string;
-  trackName: string;
-  win: boolean;
-  kart: string;
-  matchTime: string;
+  id: string;
+  name: string;
+  count: number;
+  win: string;
+  record: string;
 }
 
 export interface IKartRecord {
-  kartId: string;
-  kartName: string;
-  win: boolean;
-  retired: boolean;
-}
-
-export interface IMatchHistoryData {
-  combineList: IParsedMatch[];
-  fastest: IParsedMatch[];
-  infinite: IParsedMatch[];
-  soloMatches: IParsedMatch[];
-  teamMatches: IParsedMatch[];
-  trackRecords: ITrackRecord[];
-  kartRecords: IKartRecord[];
+  id: string;
+  name: ITableNameColumn;
+  win: string;
+  retired: string;
+  count: number;
 }
 
 export interface ISummaryRecord {
@@ -119,4 +101,15 @@ export interface ISummaryRecord {
   rankAverage: number;
   labels: string[];
   datas: any;
+}
+
+export interface IFilter {
+  channel: string;
+  isTeam: boolean;
+  showRetired: boolean;
+}
+
+interface ITableNameColumn {
+  name: string;
+  img: string;
 }

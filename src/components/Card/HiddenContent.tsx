@@ -5,6 +5,9 @@ import { toggleFold } from 'styles/animations';
 const arr = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
 export default function HiddenContent({ open }: { open: boolean }) {
+  const handleClick = (name: string) => {
+    console.log(name);
+  };
   const datas = SAMPLE_PLAYERS;
   return (
     <Wrapper open={open}>
@@ -23,7 +26,9 @@ export default function HiddenContent({ open }: { open: boolean }) {
                 <img alt={datas[index].characterName} src={`/metadata/kart/${datas[index].kart}.png`} />
               </Cell>
               <Cell>
-                <a href={`/user?nick=${datas[index].characterName}`}>{datas[index].characterName}</a>
+                <p onClick={() => {}} onKeyDown={() => handleClick(datas[index].characterName)}>
+                  {datas[index].characterName}
+                </p>
               </Cell>
               <Cell>{datas[index].matchTime}</Cell>
             </>
@@ -61,12 +66,17 @@ const Cell = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 60px;
+  font-size: 0.88em;
   :first-child {
+    min-height: 44px;
     background-color: #eeeeee66;
   }
   img {
     height: auto;
     width: 60%;
     object-fit: contain;
+  }
+  p {
+    cursor: pointer;
   }
 `;

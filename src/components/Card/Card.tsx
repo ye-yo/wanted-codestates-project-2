@@ -1,32 +1,35 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { ICard } from 'interfaces/match';
+import { IParsedMatch } from 'interfaces/match';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
+import { convertRelativeDate } from 'utils/date';
 import HiddenContent from './HiddenContent';
 
 interface ICardProps {
-  data: ICard;
+  data: IParsedMatch;
 }
 
-export default function Card({ data }: ICardProps) {
+const today = new Date();
+function Card({ data }: ICardProps) {
   const [open, setOpen] = useState<boolean>(false);
   const handleClickCard = () => {
     setOpen((open) => !open);
   };
+
   return (
     <CardWrap>
       <WhiteBoard>
         <Row win={!!data.win} retired={!!data.retired}>
-          <Item className="date">{data.date}</Item>
+          <Item className="date">{convertRelativeDate(today, data.date)}</Item>
           <Item className="rank">
-            #{data.rank}
-            <span>/{data.total}</span>
+            #{data.retired ? '리타이어' : data.rank}
+            {!data.retired && <span> /{data.playerCount}</span>}
           </Item>
           <Item className="track">
-            <span>{data.track}</span>
+            <span>{data.trackName}</span>
           </Item>
-          <Item className="kart">{data.kart}</Item>
-          <Item className="time">{data.time}</Item>
+          <Item className="kart">{data.kartName}</Item>
+          <Item className="time">{data.record}</Item>
           <Item className="more" onClick={handleClickCard} style={{ cursor: 'pointer' }}>
             <IconToggle open={open} />
           </Item>
@@ -36,6 +39,9 @@ export default function Card({ data }: ICardProps) {
     </CardWrap>
   );
 }
+
+export default Card;
+
 interface IRow {
   win: boolean;
   theme: any;
@@ -52,7 +58,7 @@ const WhiteBoard = styled.div`
 const Row = styled.div`
   width: 100%;
   display: table;
-  min-height: 80px;
+  min-height: 88px;
   position: relative;
   &:before {
     position: absolute;
@@ -95,16 +101,18 @@ const Item = styled.p`
   line-height: 1.24;
   white-space: normal;
   overflow: hidden;
+  position: relative;
   &.date {
     font-size: 0.88em;
     width: 60px;
   }
   &.rank {
     font-style: italic;
+    text-align: left;
     font-weight: 500;
     color: inherit;
-    width: 140px;
-    font-size: 2.2em;
+    width: 148px;
+    font-size: 2em;
     span {
       margin-left: 4px;
       font-size: 0.6em;
@@ -120,6 +128,17 @@ const Item = styled.p`
   }
   &.more {
     width: 60px;
+  }
+  &.track:after,&.kart:after{
+    content: "";
+    position: absolute;
+    display: inline-block;
+    top: 38px;
+    right: 0;
+    width: 1px;
+    height: 16px;
+    background-color: #ebebeb;
+}
   }
 `;
 

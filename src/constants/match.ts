@@ -18,7 +18,7 @@ export const GAME_TYPES = Object.freeze([
 
 export const HEADS = Object.freeze(['경기시간', '순위', '트랙', '카트', '기록', '']);
 
-export const THEADS_TRACK = Object.freeze(['트랙', '횟수', '승률', '기록', '상위']);
+export const THEADS_TRACK = Object.freeze(['트랙', '횟수', '승률', '기록']);
 export const THEADS_KART = Object.freeze(['카트', '횟수', '승률', '리타율']);
 export const SAMPLE_DATAS = [
   {

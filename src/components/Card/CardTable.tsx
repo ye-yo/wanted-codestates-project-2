@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { ICardList } from 'interfaces/match';
+import { IParsedMatch } from 'interfaces/match';
 import Card from './Card';
 
-export default function CardList({ datas }: { datas: ICardList }) {
+export default function CardList({ datas }: { datas: IParsedMatch[] }) {
   return (
     <Table>
-      {datas.map((data) => (
-        <Card key={data.id} data={data} />
+      {datas.map((data: IParsedMatch) => (
+        <Card key={data.matchId} data={data} />
       ))}
     </Table>
   );

@@ -1,24 +1,27 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import styled from 'styled-components';
 import Tab from 'components/Tab';
 import { CHANNEL_TYPES } from 'constants/match';
+import { useAppSelector, useAppDispatch } from 'store/config';
+import { setChannel } from 'store/slices/matchListSlice';
 import MatchHistory from './TabRecord/MatchHistory';
 import SideRecord from './TabRecord/SideRecord';
 
 export default function TabRecord() {
-  const [currentTab, setCurrentTab] = useState<string>(CHANNEL_TYPES[0].name);
+  const { filter } = useAppSelector((state) => state.matchList);
+  const dispatch = useAppDispatch();
 
   const handleChangeTab = useCallback(
     (name: string) => {
-      setCurrentTab(name);
+      dispatch(setChannel(name));
     },
-    [setCurrentTab],
+    [setChannel],
   );
 
   return (
     <Wrapper>
       <Border>
-        <Tab tabs={CHANNEL_TYPES} currentTab={currentTab} setCurrentTab={handleChangeTab} />
+        <Tab tabs={CHANNEL_TYPES} currentTab={filter.channel} setCurrentTab={handleChangeTab} />
       </Border>
       <TabContent>
         <SideRecord />
