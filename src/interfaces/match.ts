@@ -1,5 +1,4 @@
-// export type IMatchList = IMatch[];
-export type ICardList = ICard[];
+import { IPlayer } from './player';
 
 export interface IMatchList {
   nickname: string;
@@ -25,58 +24,74 @@ export interface IMatch {
   player: IPlayer;
 }
 
-export interface IPlayer {
-  accountNo: string;
-  characterName: string;
-  character: string;
-  kart: string;
-  license: string;
-  pet: string;
-  flyingPet: string;
-  partsEngine: string;
-  partsHandle: string;
-  partsWheel: string;
-  partsKit: string;
-  rankinggrade2: string;
-  matchRank: string;
-  matchRetired: string;
-  matchWin: string;
-  matchTime: string;
-}
-
-export interface ICard {
-  id: string;
-  kart: string;
-  track: string;
-  time: string;
-  date: string;
-  rank: string;
-  total: string;
-  win: boolean;
-  retired: boolean;
-}
-
-export interface ITotalGame {
-  win: number;
-  retired: number;
-  ranks: Array<string>;
-}
-
 export interface IParsedMatch {
   matchId: string;
   matchName: string;
+  channelType: string;
   teamId: string;
   date: string;
-  matchTime: string;
+  record: string;
   win: boolean;
   retired: boolean;
-  rank: string;
-  track: string;
-  kart: string;
+  rank: number;
+  trackId: string;
+  kartId: string;
+  trackName: string;
+  kartName: string;
+  playerCount: number;
 }
 
 export interface ITotalRecord {
   win: number;
   retired: number;
-  ranks: Array<any>;
+  ranks: Array<number>;
+  startDate: string;
+  lastDate: string;
+}
+
+export interface IUserData {
+  character: string;
+  characterName: string;
+  license: string;
+}
+
+export interface IParsedData {
+  currentUserData: IUserData;
+  matches: IParsedMatch[];
+  originMatches: IParsedMatch[];
+}
+
+export interface ITrackRecord {
+  id: string;
+  name: string;
+  count: number;
+  win: string;
+  record: string;
+}
+
+export interface IKartRecord {
+  id: string;
+  name: ITableNameColumn;
+  win: string;
+  retired: string;
+  count: number;
+}
+
+export interface ISummaryRecord {
+  win: number;
+  loose: number;
+  mostMode: string;
+  rankAverage: number;
+  datas: any;
+}
+
+export interface IFilter {
+  channel: string;
+  isTeam: boolean;
+  showRetired: boolean;
+}
+
+interface ITableNameColumn {
+  name: string;
+  img: string;
 }

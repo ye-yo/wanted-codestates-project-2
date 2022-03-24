@@ -1,26 +1,33 @@
 import styled, { css } from 'styled-components';
-import { useState } from 'react';
+import { useCallback } from 'react';
 import Toggle from 'components/Toggle';
 import { TOGGLE_COLORS } from 'constants/match';
+import { useAppSelector, useAppDispatch } from 'store/config';
+import { setGameType, setShowRetired } from 'store/slices/matchListSlice';
 
 export default function MatchTypeWrap() {
-  const [type, setType] = useState<boolean>(false);
-  const [showRetired, setShowRetired] = useState<boolean>(true);
-  const handleClickType = () => {
-    setType((type) => !type);
-    console.log(showRetired);
-  };
+  const { filter } = useAppSelector((state) => state.matchList);
+  const dispatch = useAppDispatch();
+
+  const handleClickType = () => dispatch(setGameType(!filter.isTeam));
+  const handleToggle = useCallback(
+    (toggle: boolean) => {
+      dispatch(setShowRetired(!toggle));
+    },
+    [setShowRetired],
+  );
+
   return (
     <OptionWrap>
-      <ButtonGameType current={!type} onClick={handleClickType}>
+      <ButtonGameType current={!filter.isTeam} onClick={handleClickType}>
         개인전
       </ButtonGameType>
-      <ButtonGameType current={type} onClick={handleClickType}>
+      <ButtonGameType current={filter.isTeam} onClick={handleClickType}>
         팀전
       </ButtonGameType>
       <ToggleWrap>
         리타이어 노출
-        <Toggle width={60} height={26} color={TOGGLE_COLORS} setState={setShowRetired} />
+        <Toggle width={60} height={26} color={TOGGLE_COLORS} setState={handleToggle} />
       </ToggleWrap>
     </OptionWrap>
   );

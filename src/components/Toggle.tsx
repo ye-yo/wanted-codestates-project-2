@@ -11,8 +11,10 @@ interface IToggle {
 }
 function Toggle({ width = defaultWidth, height = defaultHeight, setState, color = ['black', 'lightgray'] }: IToggle) {
   const [checked, setChecked] = useState<boolean>(true);
-  const handleClick = () => setChecked((checked) => !checked);
-  setState(checked);
+  const handleClick = () => {
+    setChecked((checked) => !checked);
+    setState(checked);
+  };
   return (
     <div>
       <ToggleContainer

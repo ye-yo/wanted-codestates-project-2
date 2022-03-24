@@ -1,11 +1,25 @@
-import { IMatch, IPlayer, ITotalGame, ITotalRecord, IParsedMatch } from 'interfaces/match';
+import temp from '../temp.json';
+import {
+  IMatch,
+  IParsedMatch,
+  IParsedData,
+  IUserData,
+  ITrackRecord,
+  IKartRecord,
+  ISummaryRecord,
+  IFilter,
+} from 'interfaces/match';
+import { IPlayer } from 'interfaces/player';
 import gameType from 'datas/gameType.json';
 import characterData from 'datas/character.json';
 import trackData from 'datas/track.json';
 import kartData from 'datas/kart.json';
-import temp from '../temp.json';
+import { CHANNEL_NAMES } from 'constants/match';
+import { IDatas } from 'interfaces/chart';
+import { NEXON_STORAGE_URL } from 'constants/env';
 
 export const getIdToName = (key: string, id: string) => {
+  if (id === '') return '';
   let datas: any[] = [];
   switch (key) {
     case 'character':
@@ -33,105 +47,143 @@ const infitialUserData = {
   license: '',
 };
 
-const initialTotalData = {
-  win: 0,
-  retired: 0,
-  ranks: [],
-};
 const data = temp.matches[1].matches;
-export const getData = () => {
-  const matchList = [];
-  const soloMatches: IParsedMatch[] = [];
-  const teamMatches: IParsedMatch[] = [];
-  const combineList: IParsedMatch[] = [];
-  const fastest: IParsedMatch[] = [];
-  const infinite: IParsedMatch[] = [];
-  const trackRecords = [];
-  const kartRecords = [];
-
-  let currentUserData = infitialUserData;
-  let totalRecordData: ITotalRecord = initialTotalData;
+export const parseData = (filter: IFilter): IParsedData => {
+  let currentUserData: IUserData = infitialUserData;
+  const matches: IParsedMatch[] = [];
+  const originMatches: IParsedMatch[] = [];
 
   data.forEach((match: IMatch) => {
-    const { teamId, player, channelName } = match;
+    const { player } = match;
+    if (!player.matchRank) return;
     currentUserData = getCurrentUserData(player, currentUserData);
-    totalRecordData = getGameResult(totalRecordData, player);
-
     const parsedMatch = extractData(match);
-    const trackRecord = getTrackRecord(match, parsedMatch);
-    const kartRecord = getKartRecord(match, parsedMatch);
-
-    matchList.push(parsedMatch);
-    trackRecords.push(trackRecord);
-    kartRecords.push(kartRecord);
-
-    if (teamId) {
-      teamMatches.push(parsedMatch);
-    } else {
-      soloMatches.push(parsedMatch);
-    }
-    if (channelName === 'speedIndiFastest') {
-      fastest.push(parsedMatch);
-    } else if (channelName === 'speedIndiInfinit') {
-      infinite.push(parsedMatch);
-    } else {
-      combineList.push(parsedMatch);
+    originMatches.push(parsedMatch);
+    if (isMatchedFilter(filter, parsedMatch)) {
+      matches.push(parsedMatch);
     }
   });
 
-  const matchHistoryData = {
-    combineList,
-    fastest,
-    infinite,
-    soloMatches,
-    teamMatches,
-  };
-
-  return { totalRecordData, matchHistoryData, total: data.length };
+  return { matches, originMatches, currentUserData };
 };
 
-const extractData = (match: IMatch) => {
-  const { matchId, matchType, teamId, endTime, trackId, player, playerCount, matchResult } = match;
+const extractData = (match: IMatch): IParsedMatch => {
+  const { matchId, channelName, matchType, teamId, endTime, trackId, player, playerCount, matchResult } = match;
   const matchName = getIdToName('match', matchType);
   return {
     matchId,
+    channelType: getChannelType(channelName),
     matchName,
     teamId,
     date: endTime,
-    matchTime: player.matchTime,
+    record: '-',
     playerCount,
     win: matchResult === '1',
-    retired: player.matchRetired !== '',
-    rank: player.matchRank,
-    track: trackId ? getIdToName('track', trackId) : '',
-    kart: player.kart ? getIdToName('kart', player.kart) : '',
+    retired: player.matchRetired === '1',
+    rank: +player.matchRank > 8 ? 8 : +player.matchRank,
+    trackId,
+    kartId: player.kart,
+    trackName: getIdToName('track', trackId),
+    kartName: getIdToName('kart', player.kart),
   };
 };
 
-const getTrackRecord = (match: IMatch, parsedMatch: IParsedMatch) => {
-  return {
-    trackId: match.trackId,
-    trackName: parsedMatch.track,
-    win: parsedMatch.win,
-    kart: match.player.kart,
-    matchTime: parsedMatch.matchTime,
-  };
+const IS_FASTEST = /fastest/;
+const IS_INFINIT = /infinit/;
+const getChannelType = (name: string) => {
+  if (IS_INFINIT.test(name)) return '무한부스터';
+  if (IS_FASTEST.test(name)) return '매우빠름';
+  return '통합';
 };
 
-const getKartRecord = (match: IMatch, parsedMatch: IParsedMatch) => {
-  return {
-    kartId: match.player.kart,
-    kartName: parsedMatch.kart,
-    win: parsedMatch.win,
-    retired: parsedMatch.retired,
-  };
+type ITracksType = { [k: string]: ITrackRecord };
+
+export const getTrackList = (matches: IParsedMatch[] | undefined) => {
+  if (!matches) return [];
+  const tracks: ITracksType = {};
+  matches.forEach(({ trackId, trackName, win }: IParsedMatch) => {
+    if (tracks[trackId]) {
+      const prev = tracks[trackId];
+
+      tracks[trackId] = {
+        ...tracks[trackId],
+        count: prev.count + 1,
+        win: getNewPercentage(prev.win, prev.count),
+        record: '-',
+      };
+    } else {
+      tracks[trackId] = {
+        id: trackId,
+        name: trackName,
+        count: 1,
+        win: win ? '100%' : '0%',
+        record: '-',
+      };
+    }
+  });
+  return Object.values(tracks);
 };
 
-const getGameResult = (total: ITotalGame, data: IPlayer) => {
-  if (data.matchWin === '1') total.win += 1;
-  if (data.matchRetired === '1') total.retired += 1;
-  if (data.matchRank) total.ranks.push(data.matchRank);
-  return total;
+const getNewPercentage = (value: string, count: number) => {
+  let newValue = value;
+  if (value) {
+    const prevWin = +value.replace('%', '');
+    const prevWinCount = (prevWin / 100) * count;
+    newValue = `${Math.floor((prevWinCount + 1) / (count + 1))}%`;
+  }
+  return newValue;
+};
+
+type IKartsType = { [k: string]: IKartRecord };
+
+export const getKartList = (matches: IParsedMatch[] | undefined) => {
+  if (!matches) return [];
+  const karts: IKartsType = {};
+  matches.forEach(({ kartId, kartName, win, retired }: IParsedMatch) => {
+    if (karts[kartId]) {
+      const prev = karts[kartId];
+      karts[kartId] = {
+        ...karts[kartId],
+        count: prev.count + 1,
+        win: getNewPercentage(prev.win, prev.count),
+        retired: getNewPercentage(prev.retired, prev.count),
+      };
+    } else {
+      karts[kartId] = {
+        id: kartId,
+        name: {
+          name: kartName,
+          img: `${NEXON_STORAGE_URL}/kart/${kartId}.png`,
+        },
+        count: 1,
+        win: win ? '100%' : '0%',
+        retired: retired ? '100%' : '0%',
+      };
+    }
+  });
+
+  return Object.values(karts);
+};
+
+export const getTrackWithKart = (kartId: string, matches: IParsedMatch[] | undefined) => {
+  if (!matches || matches.length === 0) return [];
+  const map = new Map();
+  matches.forEach((match) => {
+    if (match.kartId === kartId) {
+      map.set(match.trackId, match);
+    }
+  });
+  return [...map.values()];
+};
+
+export const getGameResult = (list: IParsedMatch[]) => {
+  let win = 0;
+  let retired = 0;
+  list.forEach((match) => {
+    if (match.win) win += 1;
+    if (match.retired) retired += 1;
+  });
+  return { win, retired };
 };
 
 interface IUserProfile {
@@ -141,43 +193,108 @@ interface IUserProfile {
 }
 
 const getCurrentUserData = (player: IPlayer, userData: IUserProfile) => {
-  if (!userData.character || !userData.license) {
+  if (userData.character && userData.license) {
     return userData;
   }
+  const user = { ...userData };
   if (player.character && !userData.character) {
-    userData.character = player.character;
-    userData.characterName = getIdToName('character', player.character);
+    user.character = player.character;
+    user.characterName = getIdToName('character', player.character);
   }
   if (player.license && !userData.license) {
-    userData.license = player.license;
+    user.license = player.license;
   }
-  return userData;
+  return user;
 };
 
-export const convertRelativeDate = (now: Date, date: string) => {
-  const today = new Date();
-  const targetTime = new Date(date);
+export const Summary = {
+  getMostMode: (matches: IParsedMatch[]) => {
+    let combine = 0;
+    let fastest = 0;
+    let infinite = 0;
+    matches.forEach((item) => {
+      if (item.channelType === '무한부스터') infinite += 1;
+      else if (item.channelType === '매우빠름') fastest += 1;
+      else combine += 1;
+    });
+    const array = [combine, fastest, infinite];
+    const maxCount = array.reduce((a, b) => (a > b ? a : b));
+    const mostModes = CHANNEL_NAMES.filter((item: string, index: number) => array[index] === maxCount);
+    return mostModes.join(',');
+  },
+  getRankAverage: (matchList: IParsedMatch[]) => {
+    const rankSum = matchList.reduce((sum, cur) => sum + cur.rank, 0);
+    return rankSum / matchList.length;
+  },
+};
 
-  const tiemLag = Math.floor((today.getTime() - targetTime.getTime()) / 1000 / 60);
-  if (tiemLag < 1) return '몇 초 전';
-  if (tiemLag < 60) {
-    return `${tiemLag}분 전`;
+export const getSummaryRecord = (matches: IParsedMatch[] | null): ISummaryRecord => {
+  if (matches && matches.length > 0) {
+    const { win } = getGameResult(matches);
+    const loose = matches.length - win;
+    const datas: IDatas = {
+      data: [win, loose],
+      color: ['#0077ff', '#f62459'],
+    };
+    return {
+      win,
+      loose,
+      mostMode: Summary.getMostMode(matches),
+      rankAverage: Summary.getRankAverage(matches),
+      datas,
+    };
   }
+  return { win: 0, loose: 0, mostMode: '', rankAverage: 0, datas: {} };
+};
 
-  const tiemLagHour = Math.floor(tiemLag / 60);
-  if (tiemLagHour < 24) {
-    return `${tiemLagHour}시간 전`;
+export const getRankingGraphRecord = (matches: IParsedMatch[] | null) => {
+  if (matches && matches.length > 0) {
+    const ranks = matches.map((match) => +match.rank);
+    const total = ranks.length > 200 ? 200 : ranks.length;
+    const latest = total > 50 ? 50 : total;
+    let totals = ranks.slice(0, total);
+    const totalRankAverage = Summary.getRankAverage(matches);
+    if (latest !== total) {
+      totals = ranks.slice(0, latest);
+    }
+
+    return {
+      total: {
+        count: ranks.length,
+        rankAverage: totalRankAverage,
+      },
+      latest: {
+        count: latest,
+        rankAverage: latest !== total ? Summary.getRankAverage(matches.slice(0, latest)) : totalRankAverage,
+      },
+      datas: totals,
+    };
   }
+  return { total: {}, latest: {}, labels: [], datas: [] };
+};
 
-  const tiemLagDay = Math.floor(tiemLag / 60 / 24);
-  if (tiemLagDay < 365) {
-    return `${tiemLagDay}일 전`;
-  }
+export const getRacePercentage = (matches: IParsedMatch[] | null) => {
+  if (!matches) return { win: 0, complete: 0, retired: 0 };
+  const { win, retired } = getGameResult(matches);
+  const total = matches.length;
+  const winPercent = Math.floor((win / total) * 100);
+  const retiredPercent = Math.floor((retired / total) * 100);
+  const completePercent = 100 - retiredPercent;
+  return {
+    win: winPercent,
+    complete: completePercent,
+    retired: retiredPercent,
+  };
+};
 
-  const timeLagMonth = Math.floor(tiemLag / 60 / 24 / 12);
-  if (timeLagMonth < 12) {
-    return `${tiemLagDay}개월 전`;
-  }
+export const filtering = (matches: IParsedMatch[], filter: IFilter) => {
+  return matches.filter((item) => isMatchedFilter(filter, item));
+};
 
-  return `${Math.floor(tiemLagDay / 365)}년 전`;
+const isMatchedFilter = (filter: IFilter, item: IParsedMatch) => {
+  const itemIsTeam = item.teamId === '1';
+  if (itemIsTeam !== filter.isTeam) return false;
+  if (item.channelType !== filter.channel) return false;
+  if (!filter.showRetired && item.retired) return false;
+  return true;
 };

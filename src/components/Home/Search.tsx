@@ -8,7 +8,6 @@ import { FaUserAlt } from 'react-icons/fa';
 import useAutoSearch from 'hooks/useAutoSearch';
 import { useAppDispatch } from 'store/config';
 import { getUser } from 'services/userService';
-import { getMatchList } from 'services/matchListService';
 import SelectType from './SelectType';
 
 const keywordList = [
@@ -38,7 +37,6 @@ function Search() {
     }
     const user = await dispatch(getUser(value));
     if (user.payload) {
-      dispatch(getMatchList(user.payload.accessId));
       navigate(`/${searchOption.value}?${value}`);
     } else {
       alert('존재하지 않는 사용자입니다.');

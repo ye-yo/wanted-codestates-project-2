@@ -2,17 +2,32 @@ import styled from 'styled-components';
 import { NEXON_TMI } from 'constants/env';
 import User from 'components/User/index';
 import ApiInfo from 'components/User/ApiInfo';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from 'store/config';
+import { getMatchList } from 'services/matchListService';
+import { DEFAULT_FILTER } from 'constants/match';
 
 function UserPage() {
+  const { user } = useAppSelector((state) => state.user);
+  const { matches } = useAppSelector((state) => state.matchList);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getMatchList({ accessId: user.accessId, filter: DEFAULT_FILTER }));
+    }
+  }, []);
   return (
     <Wrapper>
       <Background className="background" />
-      <Inner className="inner">
-        <ApiInfo />
-        <User.Profile />
-        <User.SummaryRecord />
-        <User.TabRecord />
-      </Inner>
+      {matches && (
+        <Inner className="inner">
+          <ApiInfo />
+          <User.Profile />
+          <User.SummaryRecord />
+          <User.TabRecord />
+        </Inner>
+      )}
     </Wrapper>
   );
 }

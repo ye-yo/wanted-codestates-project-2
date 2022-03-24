@@ -34,12 +34,17 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(getUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.lastUpdate = new Date().toString();
+        state.loading = false;
       })
       .addCase(getUser.rejected, (state) => {
         state.user = null;
+        state.loading = false;
       });
   },
 });

@@ -1,56 +1,90 @@
 /* eslint-disable react/no-array-index-key */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 interface ITable {
   theads: readonly string[];
-  datas: any[];
+  datas?: any[];
+  handleSelect: (id: string) => void;
 }
-export default function Table({ theads, datas }: ITable) {
-  const [selected, setSelected] = useState<number>(0);
-  const handleClick = (index: number) => {
-    setSelected(index);
+export default function Table({ theads, datas, handleSelect }: ITable) {
+  const [selected, setSelected] = useState<string>();
+  const handleClick = (id: string) => {
+    setSelected(id);
+    handleSelect(id);
   };
+  useEffect(() => {
+    if (datas) setSelected(datas[0].id);
+  }, []);
 
   return (
     <Wrapper>
-      <thead>
-        <tr>
-          <td>선택</td>
-          {theads.map((head, index) => (
-            <td key={index}>{head}</td>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {datas.map((data, index) => (
-          <tr key={index} onClick={() => handleClick(index)} className={selected === index ? 'selected' : ''}>
-            <td>
-              <IconCheck className={selected === index ? 'selected' : ''} />
-            </td>
-            {Object.values(data).map((value: any, index) => (
-              <td key={index}>
-                {value.img && <img src={value.img} alt={value.name} />}
-                <span>{value.name ? value.name : value}</span>
-              </td>
+      <TableWrapper>
+        <thead>
+          <tr>
+            <td>선택</td>
+            {theads.map((head, index) => (
+              <td key={index}>{head}</td>
             ))}
           </tr>
-        ))}
-      </tbody>
+        </thead>
+        <tbody>
+          {datas &&
+            datas.map((data) => (
+              <tr key={data.id} onClick={() => handleClick(data.id)} className={selected === data.id ? 'selected' : ''}>
+                <td>
+                  <IconCheck className={selected === data.id ? 'selected' : ''} />
+                </td>
+                {Object.keys(data)
+                  .slice(1)
+                  .map((key, index) => {
+                    const value = data[key];
+                    return (
+                      <td key={index}>
+                        {value?.img && <img src={value.img} alt={value.name} />}
+                        <span>{value?.name ? value.name : value}</span>
+                      </td>
+                    );
+                  })}
+              </tr>
+            ))}
+        </tbody>
+      </TableWrapper>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.table`
+Table.defaultProps = { datas: [] };
+
+const Wrapper = styled.div`
+  padding-bottom: 1.6rem;
+  background-color: white;
+`;
+const TableWrapper = styled.table`
   font-size: 1.1rem;
   width: 100%;
-  background-color: #ffffff88;
   border-collapse: collapse;
 
   thead {
     height: 34px;
-    background-color: #eeeeee;
+    background-color: #eeeeee88;
     font-weight: 500;
+    td {
+      position: relative;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 10px;
+        right: 0;
+        display: inline-block;
+        width: 1px;
+        height: 15px;
+        background-color: #ccc;
+      }
+      &:last-child {
+        content: none;
+      }
+    }
   }
   tbody {
     background-color: white;
@@ -61,6 +95,7 @@ const Wrapper = styled.table`
   }
 
   tbody {
+    padding-bottom: 1rem;
     tr {
       cursor: pointer;
       height: 40px;
@@ -70,6 +105,7 @@ const Wrapper = styled.table`
       }
     }
     td {
+      min-width: 32px;
       :nth-child(2) {
         text-align: left;
         padding-left: 10px;

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
-import { SAMPLE_DATAS } from 'constants/match';
 import CardTable from 'components/Card/CardTable';
+import { useAppSelector } from 'store/config';
 
 export default function MatchHistory() {
+  const { matches } = useAppSelector((state) => state.matchList);
+
   return (
     <Wrapper>
-      <TabContent>
-        <CardTable datas={SAMPLE_DATAS} />
-      </TabContent>
+      <TabContent>{matches?.matches && <CardTable datas={matches.matches} />}</TabContent>
     </Wrapper>
   );
 }

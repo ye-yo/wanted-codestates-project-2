@@ -1,29 +1,50 @@
 import styled from 'styled-components';
+import { getKartList, getTrackWithKart, getIdToName } from 'utils/parser';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAppSelector } from 'store/config';
+import { NEXON_STORAGE_URL } from 'constants/env';
+import { IKartRecord, IParsedMatch } from 'interfaces/match';
+import { handleKartImgError } from 'utils/common';
+import { Wrapper, Box, TitleWrap, Title, IconTrack } from './ContentTrack';
 import Table from './Table';
-import { Wrapper, Box, TitleWrap, Title } from './ContentTrack';
 
 interface ITable {
   current: boolean;
   theads: readonly string[];
-  datas: any[];
 }
 
-const recordList = [
-  {
-    id: 1,
-    icon: 'https://s3-ap-northeast-1.amazonaws.com/solution-userstats/kartimg/Category/village_1.png',
-    track: '빌리지 운하',
-    time: `1'27'56`,
-  },
-  {
-    id: 2,
-    icon: 'https://s3-ap-northeast-1.amazonaws.com/solution-userstats/kartimg/Category/village_1.png',
-    track: '빌리지 운하',
-    time: `1'27'56`,
-  },
-];
+interface ICurrentKart extends IKartRecord {
+  tracks: IParsedMatch[] | [];
+}
 
-export default function ContentKart({ current, theads, datas }: ITable) {
+const getKartData = (kartList: IKartRecord[], id: string, matches: IParsedMatch[] | undefined) => {
+  if (!matches) return null;
+  const kartData = kartList.filter((item) => item.id === id);
+  const kart = {
+    ...kartData[0],
+    tracks: getTrackWithKart(id, matches),
+  };
+  return kart;
+};
+
+export default function ContentKart({ current, theads }: ITable) {
+  const { matches } = useAppSelector((state) => state.matchList);
+  const kartList = useMemo(() => getKartList(matches?.matches), [matches]);
+  const [currentKart, setCurrentKart] = useState<ICurrentKart | null>(null);
+
+  useEffect(() => {
+    if (kartList.length > 0) {
+      setCurrentKart(getKartData(kartList, kartList[0].id, matches?.matches));
+    } else setCurrentKart(null);
+  }, [kartList]);
+
+  const handleSelect = useCallback(
+    (id: string) => {
+      setCurrentKart(getKartData(kartList, id, matches?.matches));
+    },
+    [setCurrentKart],
+  );
+
   return (
     <Wrapper current={current ? 1 : 0}>
       <Box>
@@ -34,23 +55,28 @@ export default function ContentKart({ current, theads, datas }: ITable) {
         </TitleWrap>
         <KartWrap>
           <KartTitle>
-            <span>일반</span> 파라곤 X
+            {currentKart && (
+              <>
+                <span>일반</span> {currentKart?.name.name}
+              </>
+            )}
           </KartTitle>
           <KartDetail>
-            <img src="/character.png" alt="카트" />
+            <img src={`${NEXON_STORAGE_URL}/kart/${currentKart?.id}.png`} onError={handleKartImgError} alt="카트" />
             <MatchRecordList>
-              {recordList.map((record) => (
-                <TimeRow key={record.id}>
-                  <img src={record.icon} alt={`${record.track}트랙 아이콘`} />
-                  <span>{record.track}</span>
-                  <span>{record.time || '-'}</span>
-                </TimeRow>
-              ))}
+              {currentKart &&
+                currentKart?.tracks.map((data: IParsedMatch) => (
+                  <TimeRow key={data.matchId}>
+                    <IconTrack />
+                    <span>{getIdToName('track', data.trackId)}</span>
+                    <span>{data.record || '-'}</span>
+                  </TimeRow>
+                ))}
             </MatchRecordList>
           </KartDetail>
         </KartWrap>
       </Box>
-      <Table theads={theads} datas={datas} />
+      <Table theads={theads} datas={kartList} handleSelect={handleSelect} />
     </Wrapper>
   );
 }
@@ -73,15 +99,19 @@ const KartTitle = styled.p`
 const KartDetail = styled.div`
   display: flex;
   width: 100%;
+  margin-top: 1rem;
+  min-height: 100px;
   > img {
     width: 38%;
     height: auto;
+    object-fit: contain;
   }
 `;
 const MatchRecordList = styled.ul`
   flex: 1;
   border-left: 1px solid ${({ theme }) => theme.color.main}44;
   padding: 0.4rem 0.6rem;
+  margin-left: 10px;
 `;
 
 const TimeRow = styled.li`
