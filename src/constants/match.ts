@@ -4,6 +4,8 @@ export const CHANNEL_TYPES = Object.freeze([
   { id: 3, name: '무한부스터' },
 ]);
 
+export const CHANNEL_NAMES = Object.freeze(['통합', '매우빠름', '무한부스터']);
+
 export const SIDE_TABS = Object.freeze([
   { id: 1, name: '트랙' },
   { id: 2, name: '카트' },

@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import { NEXON_TMI } from 'constants/env';
+import { NEXON_TMI, NEXON_STORAGE_URL } from 'constants/env';
 import styled from 'styled-components';
 import { useAppSelector } from 'store/config';
+import { convertRelativeDate } from 'utils/date';
 import Character from './Profile/Character';
 import ButtonWrap from './Profile/ButtonWrap';
 import SubProfile from './Profile/SubProfile';
 import MatchTypeWrap from './Profile/MatchTypeWrap';
 
 const getLastDateString = (date: string) => {
-  console.log(date);
-  return '몇 초 전 ';
+  return convertRelativeDate(new Date(), date);
 };
 export default function Profile() {
   const { user, lastUpdate } = useAppSelector((state) => state.user);
+  const { matches } = useAppSelector((state) => state.matchList);
   const [lastUpdateText, setLastUpdateText] = useState<string>();
   useEffect(() => {
     if (lastUpdate) {
@@ -20,13 +21,12 @@ export default function Profile() {
     }
   }, [lastUpdate, setLastUpdateText]);
 
-  // https: const user = await dispatch(getUser(value));
   return (
     <Wrapper>
       {user && (
         <>
           <Block>
-            <Character img="/character.png" />
+            <Character img={`${NEXON_STORAGE_URL}/character/${matches?.currentUserData.character}.png`} />
           </Block>
           <Block right>
             <Name>{user.name}</Name>

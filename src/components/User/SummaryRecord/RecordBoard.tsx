@@ -36,12 +36,13 @@ const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 500px;
   max-height: 400px;
-  min-height: 280px;
+  min-height: 240px;
   background-color: rgba(255, 255, 255, 0.8);
   > div {
-    margin: 0 1rem;
-    padding: 1rem 0;
+    margin: 0;
+    padding: 1rem 10px;
     &.pd-1 {
+      margin: 0 1rem;
       padding: 1.2rem 0.4rem 1rem;
     }
   }
@@ -63,9 +64,10 @@ const Title = styled.div`
     vertical-align: middle;
   }
   b {
+    font-weight: 500;
     color: ${({ theme }) => theme.color.main};
   }
-  span {
+  > span {
     font-size: 0.88em;
     font-weight: 500;
     margin-left: auto;

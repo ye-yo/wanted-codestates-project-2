@@ -9,13 +9,18 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import styled from 'styled-components';
+import { useAppSelector } from 'store/config';
+import { getRankingGraphRecord } from 'utils/parser';
+// import { ISummaryRecord } from 'interfaces/match';
+import { useEffect, useMemo, useState } from 'react';
 import RecordBox from './RecordBoard';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const labels = [1, 6, 3, 1, 2, 3, 4, 8, 4];
 const total = labels.length;
-export const options = {
+const options = {
   responsive: true,
   maintainAspectRatio: false,
   pointBorderColor: 'rgb(0 119 255)',
@@ -48,26 +53,42 @@ export const options = {
   },
 };
 const title = { emphasis: '순위변동', text: '추이' };
-export const data = {
-  labels,
-  datasets: [
-    {
-      data: [1, 6, 3, 1, 2, 3, 4, 8, 4],
-      borderColor: 'rgb(0 119 255)',
-      tension: 0.3,
-      drawActiveElementsOnTop: true,
-    },
-  ],
-};
 
 function RankingGraph() {
-  const summaray = <span>85전 2승 3패</span>;
+  const { matches } = useAppSelector((state) => state.matchList);
+  const { total, latest, datas } = useMemo(() => getRankingGraphRecord(matches), [matches]);
+  const [chartData, setChartData] = useState<any>(null);
+  const [summary, setSummary] = useState<any>();
+  useEffect(() => {
+    const newChartData = {
+      labels,
+      datasets: [
+        {
+          data: datas,
+          borderColor: 'rgb(0 119 255)',
+          tension: 0.3,
+          drawActiveElementsOnTop: true,
+        },
+      ],
+    };
+    setChartData(newChartData);
+    setSummary(
+      <span>
+        지난 {total.count}경기 <Color>{total.rankAverage}위</Color> 최근 {latest.count}경기{' '}
+        <Color>{latest.rankAverage}위</Color>
+      </span>,
+    );
+  }, [datas]);
 
   return (
-    <RecordBox title={title} summary={summaray}>
-      <Line options={options} data={data} />
+    <RecordBox title={title} summary={summary}>
+      {chartData && <Line options={options} data={chartData} />}
     </RecordBox>
   );
 }
+
+const Color = styled.span`
+  color: ${({ theme }) => theme.color.main};
+`;
 
 export default RankingGraph;

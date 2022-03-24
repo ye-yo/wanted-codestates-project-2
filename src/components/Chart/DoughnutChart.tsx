@@ -56,6 +56,15 @@ function DoughnutChart({ percentage, options }: IDoughnutChart) {
 const Wrapper = styled.div`
   flex: 1;
   font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Title = styled.p`
+  font-size: 1em;
+  text-align: center;
+  margin-bottom: 2rem;
 `;
 
 interface IDoughnut {
@@ -80,6 +89,7 @@ const Doughnut = styled.div`
     }
   `}
   svg {
+    cursor: initial;
     position: absolute;
     top: 0;
     left: 0;
@@ -118,13 +128,6 @@ const Outer = styled.div`
   border-radius: 50%;
   box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15), -6px -6px 10px -1px rgba(255, 255, 255, 0.4);
 `;
-
-const Title = styled.p`
-  font-size: 1em;
-  text-align: center;
-  margin-bottom: 1rem;
-`;
-
 const Text = styled.p`
   width: 100%;
   height: 100%;

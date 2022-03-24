@@ -56,12 +56,6 @@ export interface ICard {
   retired: boolean;
 }
 
-export interface ITotalGame {
-  win: number;
-  retired: number;
-  ranks: Array<string>;
-}
-
 export interface IParsedMatch {
   matchId: string;
   matchName: string;
@@ -78,5 +72,51 @@ export interface IParsedMatch {
 export interface ITotalRecord {
   win: number;
   retired: number;
-  ranks: Array<any>;
+  ranks: Array<number>;
+  startDate: string;
+  lastDate: string;
+}
+export interface IUserData {
+  character: string;
+  characterName: string;
+  license: string;
+}
+export interface IParsedData {
+  currentUserData: IUserData;
+  summary: ITotalRecord;
+  matchHistoryData: IMatchHistoryData;
+  total: number;
+}
+
+export interface ITrackRecord {
+  trackId: string;
+  trackName: string;
+  win: boolean;
+  kart: string;
+  matchTime: string;
+}
+
+export interface IKartRecord {
+  kartId: string;
+  kartName: string;
+  win: boolean;
+  retired: boolean;
+}
+
+export interface IMatchHistoryData {
+  combineList: IParsedMatch[];
+  fastest: IParsedMatch[];
+  infinite: IParsedMatch[];
+  soloMatches: IParsedMatch[];
+  teamMatches: IParsedMatch[];
+  trackRecords: ITrackRecord[];
+  kartRecords: IKartRecord[];
+}
+
+export interface ISummaryRecord {
+  loose: number;
+  mostMode: string;
+  rankAverage: number;
+  labels: string[];
+  datas: any;
 }

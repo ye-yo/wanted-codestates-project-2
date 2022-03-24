@@ -1,31 +1,36 @@
 import styled, { css } from 'styled-components';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import ProgressBar from 'components/Chart/ProgressBar';
-import { IDatas } from 'interfaces/chart';
+import { useAppSelector } from 'store/config';
+import { getSummaryRecord } from 'utils/parser';
+import { ISummaryRecord } from 'interfaces/match';
 import RecordBoard from './RecordBoard';
 
 const title = { emphasis: '한눈에 보기' };
-const datas: IDatas = {
-  data: [2, 3],
-  color: ['#0077ff', '#f62459'],
-};
-const labels = ['2승', '3패'];
+
 function QuickRecordBoard() {
+  const { matches } = useAppSelector((state) => state.matchList);
+  const { loose, mostMode, rankAverage, labels, datas } = useMemo<ISummaryRecord>(
+    () => getSummaryRecord(matches),
+    [matches],
+  );
+
   const customScore = (
     <CustomScore>
-      85전 <span className="blue">2승</span> <span className="red">3패</span>
+      {matches?.total || 0}전 <span className="blue">{matches?.summary.win || 0}승</span>{' '}
+      <span className="red">{loose}패</span>
     </CustomScore>
   );
 
   return (
     <RecordBoard title={title}>
       <Wrapper>
-        <Box title="전적" score="20" unit="위" full customScore={customScore}>
+        <Box title="전적" score="20" full customScore={customScore}>
           <ProgressBar datas={datas} labels={labels} />
         </Box>
-        <Box title="평균등수" score="20" unit="위" />
+        <Box title="평균등수" score={rankAverage} unit="위" />
         {/* <Box title="경기수" score="185" unit="경기" /> */}
-        <Box title="최다주행 모드" score="통합" />
+        <Box title="최다주행 모드" score={mostMode} />
       </Wrapper>
     </RecordBoard>
   );
@@ -42,7 +47,7 @@ const Wrapper = styled.div`
 
 interface IBox {
   title: string;
-  score: string;
+  score: string | number;
   unit?: string;
   full?: boolean;
   customScore?: ReactNode;
@@ -115,7 +120,7 @@ const Title = styled.div`
 `;
 
 const Score = styled.div`
-  font-size: 2.4em;
+  font-size: 1.8em;
   font-weight: bold;
   color: ${({ theme }) => theme.color.main};
   text-align: right;
