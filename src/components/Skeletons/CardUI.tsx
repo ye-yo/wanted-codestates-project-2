@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
+import { skeleton } from 'styles/animations';
 
 function CardUI() {
   return (
-    <Wrap>
+    <Wrap className="skeleton">
       <WhiteBoard>
         <RowUI>
           <ItemUI className="date">
@@ -39,9 +40,6 @@ export default function CardsUI() {
       <CardUI />
       <CardUI />
       <CardUI />
-      <CardUI />
-      <CardUI />
-      <CardUI />
     </>
   );
 }
@@ -52,6 +50,19 @@ export const CardWrap = styled.div`
 
 const Wrap = styled(CardWrap)`
   opacity: 0.3;
+  position: relative;
+  overflow: hidden;
+  &.skeleton {
+    &:after {
+      content: '';
+      width: 0;
+      height: 100%;
+      top: 0;
+      box-shadow: 0 0 75px 75px #ffffff65;
+      animation: ${skeleton} 1s infinite ease-in;
+      position: absolute;
+    }
+  }
 `;
 
 const WhiteBoard = styled.div`

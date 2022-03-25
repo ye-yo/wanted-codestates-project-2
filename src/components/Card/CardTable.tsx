@@ -41,6 +41,12 @@ export default function CardTable({ datas }: { datas: IParsedMatch[] }) {
       ))}
       {datas.length > 0 && <Bottom ref={setRef} />}
       {loading && <CardUI />}
+      {!loading && datas.length === 0 && (
+        <Empty>
+          <b>{user?.name}</b>님은 아직 <b>{filter.channel}</b> 채널의 <br />
+          <b>{filter.isTeam ? '팀전' : '개인전'}</b> 전적 데이터가 없습니다.
+        </Empty>
+      )}
     </Table>
   );
 }
@@ -58,4 +64,17 @@ const Bottom = styled.div`
   width: 100%;
   left: 0;
   bottom: 0;
+`;
+
+const Empty = styled.div`
+  background-color: #ffffff88;
+  font-size: 1.6rem;
+  text-align: center;
+  width: 100%;
+  border-radius: 2rem;
+  padding: 8rem;
+  line-height: 2;
+  b {
+    color: ${({ theme }) => theme.color.main};
+  }
 `;

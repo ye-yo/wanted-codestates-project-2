@@ -15,9 +15,9 @@ interface UserStateType {
 
 const initialState: UserStateType = {
   user: {
-    accessId: '604675539',
-    level: 16,
-    name: '다이스x',
+    accessId: '',
+    level: 0,
+    name: '',
   },
   loading: false,
   error: '',

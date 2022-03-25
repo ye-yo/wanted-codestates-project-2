@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+import { skeleton } from 'styles/animations';
 
 function DoughnutChartUI() {
   return (
     <Wrapper>
-      <Title />
-      <Doughnut>
+      <Title className="skeleton" />
+      <Doughnut className="skeleton">
         <Hole />
       </Doughnut>
     </Wrapper>
@@ -42,6 +43,18 @@ const Title = styled(TitleUI)`
   height: 1.8rem;
   width: 50%;
   background-color: gray;
+  &.skeleton {
+    position: relative;
+    &:after {
+      content: '';
+      width: 0;
+      height: 100%;
+      top: 0;
+      box-shadow: 0 0 75px 75px #ffffff65;
+      animation: ${skeleton} 1s infinite ease-in;
+      position: absolute;
+    }
+  }
 `;
 
 export const DoughnutUI = styled.div`
@@ -49,6 +62,18 @@ export const DoughnutUI = styled.div`
   flex: 1;
   border-radius: 50%;
   background-color: #eeeeee;
+  &.skeleton {
+    position: relative;
+    &:after {
+      content: '';
+      width: 0;
+      height: 100%;
+      top: 0;
+      box-shadow: 0 0 75px 75px #ffffff65;
+      animation: ${skeleton} 1s infinite ease-in;
+      position: absolute;
+    }
+  }
 `;
 
 const Doughnut = styled(DoughnutUI)`

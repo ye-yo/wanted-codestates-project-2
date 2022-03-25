@@ -33,3 +33,23 @@ export const fadeUp = () => keyframes`
      transform: translateY(0);
   }
 `;
+
+export const skeleton = () => keyframes`
+ 0% {
+    left: 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+`;
