@@ -1,8 +1,10 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import Search from 'components/Home/Search';
 import { MENU_LIST } from 'constants/header';
 
 function Menu() {
+  const location = useLocation();
   return (
     <Wrapper>
       {MENU_LIST.map(({ id, name, link }) => (
@@ -12,6 +14,7 @@ function Menu() {
           </NavLink>
         </MenuItem>
       ))}
+      {location.pathname !== '/' && <Search size="mini" />}
     </Wrapper>
   );
 }
@@ -22,6 +25,8 @@ const Wrapper = styled.nav`
   position: relative;
   height: 56px;
   z-index: 10;
+  display: flex;
+  align-items: center;
 `;
 
 export const HoverItem = styled.li`

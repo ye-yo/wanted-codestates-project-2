@@ -21,7 +21,7 @@ export default Home;
 
 const Wrapper = styled.section`
   width: 100%;
-  height: calc(90vh - ${({ theme }) => theme.size.infoHeight});
+  height: auto;
   font-size: 1.2rem;
   color: white;
 `;
@@ -35,10 +35,15 @@ const Filter = styled.div`
   opacity: 0.3;
 `;
 const Background = styled.div`
+  height: calc(100% - 48px);
   background: url(${NEXON_TMI}/img/main_bg1.png) 50% / cover repeat;
 `;
 
 const Main = styled.div`
-  position: relative;
   text-align: center;
+  position: absolute;
+  top: 46%;
+  transform: translateY(-50%);
+  width: 100% !important;
+  min-width: 480px;
 `;

@@ -37,6 +37,7 @@ const Wrapper = styled.div`
 
 const Background = styled.div`
   position: absolute;
+  height: calc(${({ theme }) => theme.size.menuHeight} + 100%);
   top: 0;
   left: 0;
   background: url(${NEXON_TMI}/img/main_bg1.png) 50% / cover repeat;

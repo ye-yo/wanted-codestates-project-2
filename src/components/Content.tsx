@@ -6,16 +6,15 @@ function Content({ children }: { children: Element | ReactElement | null }) {
 }
 
 const ContentWrap = styled.main`
-  min-height: ${({ theme }) => `calc(100% - 1px - ${theme.size.infoHeight})`};
   min-width: max-content;
-  height: max-content;
+  height: auto;
   > div {
     height: 100%;
   }
 
   .background {
     width: 100%;
-    height: calc(${({ theme }) => theme.size.menuHeight} + 100%);
+    min-height: max-content;
     position: absolute;
     margin-top: -${({ theme }) => theme.size.menuHeight};
   }

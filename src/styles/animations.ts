@@ -15,3 +15,21 @@ export const fillColor = (offset: number) => keyframes`
      stroke-dashoffset: ${offset};
    }
 `;
+
+export const expand = (width: string, minWidth: string) => keyframes`
+  100%{
+    width: ${width};
+    min-width: ${minWidth}
+  }
+`;
+
+export const fadeUp = () => keyframes`
+  0%{
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  100%{
+     opacity:1;
+     transform: translateY(0);
+  }
+`;

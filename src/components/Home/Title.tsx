@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { fadeUp } from 'styles/animations';
 
 function Title() {
   return (
@@ -15,9 +16,9 @@ function Title() {
 export default Title;
 
 const Wrapper = styled.div`
-  padding-top: 200px;
   font-size: 1.48rem;
   margin-bottom: 10vh;
+  animation: ${fadeUp} 1s 0.4s both;
   @media (min-height: 580px) {
     margin-bottom: 4.8rem;
   }
@@ -27,7 +28,7 @@ const Wrapper = styled.div`
   }
   h1 {
     font-size: 2.4em;
-    margin: 2px 0 4px;
+    margin: 2px 0 10px;
     font-weight: 400;
     span {
       font-weight: 500;
@@ -37,7 +38,7 @@ const Wrapper = styled.div`
     letter-spacing: 4px;
     font-size: 1em;
     width: 280px;
-    padding: 4px 0 1px;
+    padding: 4px 0;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     margin: 0 auto;

@@ -25,6 +25,7 @@ function SelectType({ options, onChange }: ISelectType) {
 export default memo(SelectType);
 const SelectWrap = styled.div`
   width: 100px;
+  min-width: 100px;
   padding: 4.8px 0 4.8px 10px;
   position: relative;
   &:after {
