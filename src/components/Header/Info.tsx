@@ -4,7 +4,7 @@ import { NEXON_TMI } from 'constants/env';
 
 function Info() {
   return (
-    <Wrapper>
+    <Wrapper className="info">
       <BtnDropDown>
         <img src={`${NEXON_TMI}/img/assets/logo_kart.png`} alt="카트라이더 로고" />
       </BtnDropDown>

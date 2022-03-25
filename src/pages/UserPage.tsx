@@ -8,9 +8,11 @@ import { useAppDispatch, useAppSelector } from 'store/config';
 import { getMatchList } from 'services/matchListService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUser } from 'services/userService';
+import Spinner from 'components/Common/Spinner';
 
 function UserPage() {
   const { user } = useAppSelector((state) => state.user);
+  const { loading } = useAppSelector((state) => state.matchList);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [open, setOpenMessage] = useState(false);
@@ -41,9 +43,11 @@ function UserPage() {
     <Wrapper>
       <Background className="background" />
       <Inner className="inner">
+        {loading && <Spinner />}
         {open && <Message title="경고" message="유저 정보가 없습니다." toggleMessage={handleCloseMessage} />}
         <ApiInfo />
         <User.Profile />
+        <User.Simulation />
         <User.SummaryRecord />
         <User.TabRecord />
       </Inner>

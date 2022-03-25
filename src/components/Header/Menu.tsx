@@ -27,6 +27,7 @@ const Wrapper = styled.nav`
   z-index: 10;
   display: flex;
   align-items: center;
+  background-color: transparent;
 `;
 
 export const HoverItem = styled.li`

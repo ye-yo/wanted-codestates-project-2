@@ -5,6 +5,7 @@ export const rotate = keyframes`
     transform: rotate(360deg);
   }
 `;
+
 export const toggleFold = keyframes`
    from { opacity:0; transform:translate3d(0, -30px, 0); }
     to { opacity:1; transform:translate3d(0, 0, 0); }
@@ -52,4 +53,22 @@ export const skeleton = () => keyframes`
     left: 100%;
     opacity: 0;
   }
+`;
+
+export const move = (direction: string) => keyframes`
+  100%{
+    ${direction === 'left' ? 'margin-left' : 'margin-right'}: -180px;
+  }
+`;
+
+export const gradient = () => keyframes`
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 `;

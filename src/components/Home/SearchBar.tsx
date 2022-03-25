@@ -150,6 +150,7 @@ const SearchWrap = styled.div`
 const Form = styled.form`
   width: fit-content;
   height: 100%;
+  max-width: 670px;
   margin: 0 auto;
   font-size: 1em;
   display: flex;
