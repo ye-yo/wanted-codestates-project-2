@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { useCallback } from 'react';
-import Toggle from 'components/Toggle';
+import Toggle from 'components/Common/Toggle';
 import { TOGGLE_COLORS } from 'constants/match';
 import { useAppSelector, useAppDispatch } from 'store/config';
 import { setShowRetired } from 'store/slices/matchListSlice';

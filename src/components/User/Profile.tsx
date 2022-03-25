@@ -4,10 +4,7 @@ import styled from 'styled-components';
 import { useAppSelector } from 'store/config';
 import { convertRelativeDate } from 'utils/date';
 import useInterval from 'hooks/useInterval';
-import Character from './Profile/Character';
-import ButtonWrap from './Profile/ButtonWrap';
-import SubProfile from './Profile/SubProfile';
-import MatchTypeWrap from './Profile/MatchTypeWrap';
+import { Character, ButtonWrap, SubProfile, MatchTypeWrap } from './Profile/index';
 
 const getLastDateString = (date: string) => {
   return convertRelativeDate(new Date(), date);

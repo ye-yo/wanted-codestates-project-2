@@ -12,7 +12,6 @@ import {
 import styled from 'styled-components';
 import { useAppSelector } from 'store/config';
 import { getRankingGraphRecord } from 'utils/parser';
-// import { ISummaryRecord } from 'interfaces/match';
 import { useEffect, useMemo, useState } from 'react';
 import RecordBox from './RecordBoard';
 

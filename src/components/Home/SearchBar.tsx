@@ -90,6 +90,7 @@ function Search({ size }: { size?: string }) {
     </SearchWrap>
   );
 }
+
 Search.defaultProps = { size: null };
 export default Search;
 const SearchWrap = styled.div`

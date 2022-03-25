@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { NavLink, useLocation } from 'react-router-dom';
-import Search from 'components/Home/Search';
+import Search from 'components/Home/SearchBar';
 import { MENU_LIST } from 'constants/header';
 
 function Menu() {

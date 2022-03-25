@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { SIDE_TABS, THEADS_TRACK, THEADS_KART } from 'constants/match';
-import Tab from 'components/Tab';
+import Tab from 'components/Common/Tab';
 import ContentTrack from './ContentTrack';
 import ContentKart from './ContentKart';
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { NEXON_TMI } from 'constants/env';
 import Title from 'components/Home/Title';
-import Search from 'components/Home/Search';
+import Search from 'components/Home/SearchBar';
 
 function Home() {
   return (

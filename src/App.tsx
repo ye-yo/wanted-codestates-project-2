@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
-import Content from './components/Content';
+import Content from './components/Common/Content';
 import { Home, Ranking, User } from './pages/index';
 
 function App() {

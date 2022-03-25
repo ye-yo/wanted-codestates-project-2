@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import styled from 'styled-components';
-import Tab from 'components/Tab';
+import Tab from 'components/Common/Tab';
 import { CHANNEL_TYPES } from 'constants/match';
 import { useAppSelector, useAppDispatch } from 'store/config';
 import { setChannel } from 'store/slices/matchListSlice';
