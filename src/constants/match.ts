@@ -35,7 +35,7 @@ export const TEAM_MATCH_TYPES =
 
 export const DEFAULT_OPTIONS = {
   offset: 0,
-  limit: 200,
+  limit: 30,
   match_types: SOLO_MATCH_TYPES,
 };
 

@@ -14,7 +14,7 @@ interface IDoughnutChart {
 
 const STROKE_WIDTH = 12;
 const getStrokeDashOffset = (full: number, percent: number, radiusSize: number) => {
-  const offset = full * (1 - percent / 100);
+  const offset = full * (1 - (percent || 0) / 100);
   const weight = radiusSize / 5;
   if (offset === full) return offset;
   const offset2 = offset + weight;
@@ -24,7 +24,6 @@ const getStrokeDashOffset = (full: number, percent: number, radiusSize: number) 
 function DoughnutChart({ percentage, options }: IDoughnutChart) {
   const parentRef = useRef<HTMLDivElement>(null);
   const [doughnutOptions, setDoughnutOptions] = useState({ size: 100, full: 500, offset: 500, circleRadius: 250 });
-
   useEffect(() => {
     if (parentRef?.current) {
       const size = parentRef?.current.clientWidth;

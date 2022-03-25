@@ -18,3 +18,5 @@ export const SEARCH_OPTIONS = Object.freeze([
     placeholder: '트랙 이름을 입력',
   },
 ]);
+
+export const STORAGE_KEY = 'TMI:SEARCH_USER_LIST';

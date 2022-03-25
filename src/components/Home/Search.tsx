@@ -2,7 +2,7 @@ import { useCallback, useState, useMemo, FormEvent } from 'react';
 import styled, { css } from 'styled-components';
 import { NEXON_TMI } from 'constants/env';
 import { ISelectOption } from 'interfaces/search';
-import { SEARCH_OPTIONS } from 'constants/search';
+import { SEARCH_OPTIONS, STORAGE_KEY } from 'constants/search';
 import { useNavigate } from 'react-router-dom';
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -11,23 +11,16 @@ import { useAppDispatch } from 'store/config';
 import { getUser } from 'services/userService';
 import { expand } from 'styles/animations';
 import { getMatchList } from 'services/matchListService';
+import keywordList from 'utils/searchKeyword';
 import SelectType from './SelectType';
 
-const keywordList = [
-  { id: '1', name: '빼지' },
-  { id: '2', name: '배찌' },
-  { id: '3', name: 'abce' },
-  { id: '4', name: 'apple' },
-  { id: '5', name: '박동물관' },
-  { id: '6', name: '박물관' },
-];
 const optionIcons = [<FaUserAlt />];
 
 function Search({ size }: { size?: string }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [keyword, setKeyWord] = useState('');
-  const { matchList } = useAutoSearch(keyword, keywordList, 'name');
+  const { matchList } = useAutoSearch(keyword, keywordList.get(STORAGE_KEY));
   const [searchOption, setSearchOption] = useState<ISelectOption>(SEARCH_OPTIONS[0]);
   const optionIcon = useMemo(() => optionIcons[searchOption.id], [searchOption]);
 
@@ -40,6 +33,7 @@ function Search({ size }: { size?: string }) {
     }
     const response = await dispatch(getUser(value));
     if (response.payload) {
+      keywordList.add(STORAGE_KEY, value);
       if (size === 'mini') {
         dispatch(getMatchList({ accessId: response.payload.accessId }));
         return;
@@ -84,10 +78,10 @@ function Search({ size }: { size?: string }) {
       {size !== 'mini' && matchList.length > 0 && keyword && (
         <SuggestionWrap>
           <SuggestionList>
-            {matchList.map(({ id, name }) => (
-              <Text key={`suggestion${id}`} onClick={() => handleClickSuggestion(name)}>
+            {matchList.map(({ word }) => (
+              <Text key={`suggestion${word}`} onClick={() => handleClickSuggestion(word)}>
                 {optionIcon || ''}
-                {name}
+                {word}
               </Text>
             ))}
           </SuggestionList>
@@ -118,7 +112,8 @@ const SearchWrap = styled.div`
       opacity: 0.5;
       font-size: 0.88em;
       &:hover,
-      &:focus {
+      &:focus,
+      &:active {
         opacity: 1;
       }
 
@@ -136,6 +131,11 @@ const SearchWrap = styled.div`
         padding-left: 4px;
         &::placeholder {
           color: white;
+          opacity: 1;
+        }
+        &:hover,
+        &:focus,
+        &:active {
           opacity: 1;
         }
       }
