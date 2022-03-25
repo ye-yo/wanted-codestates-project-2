@@ -33,7 +33,7 @@ function DoughnutChart({ percentage, options }: IDoughnutChart) {
       const offset = getStrokeDashOffset(full, percentage, circleRadius);
       setDoughnutOptions({ size, full, offset, circleRadius });
     }
-  }, []);
+  }, [percentage]);
 
   return (
     <Wrapper>

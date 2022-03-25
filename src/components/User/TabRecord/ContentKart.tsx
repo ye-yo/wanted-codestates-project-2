@@ -42,7 +42,7 @@ export default function ContentKart({ current, theads }: ITable) {
     (id: string) => {
       setCurrentKart(getKartData(kartList, id, matches?.matches));
     },
-    [setCurrentKart],
+    [setCurrentKart, kartList],
   );
 
   return (

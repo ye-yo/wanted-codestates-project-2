@@ -135,8 +135,8 @@ const IconToggle = styled(IoIosArrowDropdownCircle)`
 
 const Box = styled.div`
   margin: 0 auto;
-  background-color: gray;
+  background-color: #dddddd;
   width: auto;
-  max-width: 70%;
+  max-width: 80%;
   height: 2rem;
 `;

@@ -21,7 +21,6 @@ export default function ContentTrack({ current, theads }: ITable) {
   const { matches } = useAppSelector((state) => state.matchList);
   const trackList = useMemo(() => getTrackList(matches?.matches), [matches]);
   const [currentTrack, setCurrentTrack] = useState<ITrackRecord | null>(trackList[0]);
-
   useEffect(() => {
     setCurrentTrack(trackList[0] || null);
   }, [trackList]);
@@ -31,7 +30,7 @@ export default function ContentTrack({ current, theads }: ITable) {
       const track = trackList.filter((item) => item.id === id);
       setCurrentTrack(track[0] || null);
     },
-    [setCurrentTrack],
+    [setCurrentTrack, trackList],
   );
 
   return (

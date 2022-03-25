@@ -8,14 +8,15 @@ interface ITable {
   handleSelect: (id: string) => void;
 }
 export default function Table({ theads, datas, handleSelect }: ITable) {
-  const [selected, setSelected] = useState<string>();
+  const [selected, setSelected] = useState<string>(datas && datas[0] ? datas[0].id : '');
+
+  useEffect(() => {
+    if (datas && datas[0]) setSelected(datas[0].id);
+  }, [datas]);
   const handleClick = (id: string) => {
     setSelected(id);
     handleSelect(id);
   };
-  useEffect(() => {
-    if (datas && datas[0]) setSelected(datas[0].id);
-  }, []);
 
   return (
     <Wrapper>

@@ -17,8 +17,6 @@ import RecordBox from './RecordBoard';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const labels = [1, 6, 3, 1, 2, 3, 4, 8, 4];
-const total = labels.length;
 const options = {
   responsive: true,
   maintainAspectRatio: false,
@@ -28,17 +26,7 @@ const options = {
   plugins: {
     legend: { display: false },
     datalabels: { display: false },
-    tooltip: {
-      callbacks: {
-        title(context: any[]) {
-          const { dataIndex } = context[0];
-          return `이전 ${total - Number(dataIndex)}경기`;
-        },
-        label(tooltipItem: { label: string }) {
-          return `순위: ${tooltipItem.label}`;
-        },
-      },
-    },
+    tooltip: {},
   },
   scales: {
     y: {
@@ -60,7 +48,7 @@ function RankingGraph() {
   const [summary, setSummary] = useState<any>();
   useEffect(() => {
     const newChartData = {
-      labels,
+      labels: datas,
       datasets: [
         {
           data: datas,

@@ -39,7 +39,6 @@ function Search({ size }: { size?: string }) {
       keywordList.add(STORAGE_KEY, value);
       if (size === 'mini') {
         dispatch(getMatchList({ accessId: response.payload.accessId }));
-        return;
       }
       navigate(`/${searchOption.value}?${value}`);
     } else {
@@ -110,27 +109,32 @@ const SearchWrap = styled.div`
       max-width: fit-content;
       overflow: hidden;
       float: right;
-      border-bottom: 1px solid white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
       margin: 0;
       margin-left: auto;
       transition: all 300ms ease 0ms;
-      opacity: 0.5;
       font-size: 0.88em;
+      opacity: 1;
+
+      ${Form} {
+        opacity: 0.5;
+        border: 0;
+        border-radius: 0;
+      }
+
       &:hover,
       &:focus,
       &:active {
-        opacity: 1;
+        border-color: white;
+        ${Form} {
+          opacity: 1;
+        }
       }
 
       ${FormItem} {
         animation: none;
         width: 200px;
       }
-      ${Form} {
-        border: 0;
-        border-radius: 0;
-      }
-
       ${InputSearch} {
         height: 32px;
         padding-left: 4px;
@@ -172,6 +176,9 @@ const FormItem = styled.div`
   min-width: 0;
   overflow: hidden;
   animation: ${expand('840px', '480px')} 0.5s 0.2s ease-in forwards;
+  ${({ theme }) => theme.mobile`
+     animation: ${expand('calc(100vw - 140px)', '480px')} 0.5s 0.2s ease-in forwards;
+  `}
 `;
 
 const InputSearch = styled.input`

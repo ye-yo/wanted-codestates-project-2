@@ -7,26 +7,25 @@ export const convertRelativeDate = (now: Date, date: string) => {
   const today = new Date();
   const targetTime = new Date(date);
 
-  const tiemLag = Math.floor((today.getTime() - targetTime.getTime()) / 1000 / 60);
-  if (tiemLag < 1) return '몇 초 전';
-  if (tiemLag < 60) {
-    return `${tiemLag}분 전`;
+  const minutes = Math.floor((today.getTime() - targetTime.getTime()) / 1000 / 60);
+  if (minutes < 1) return '몇 초 전';
+  if (minutes < 60) {
+    return `${minutes}분 전`;
   }
 
-  const tiemLagHour = Math.floor(tiemLag / 60);
-  if (tiemLagHour < 24) {
-    return `${tiemLagHour}시간 전`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) {
+    return `${hours}시간 전`;
   }
 
-  const tiemLagDay = Math.floor(tiemLag / 60 / 24);
-  if (tiemLagDay < 365) {
-    return `${tiemLagDay}일 전`;
+  const days = Math.floor(hours / 24);
+  if (days < 365) {
+    return `${days}일 전`;
   }
+  // const months = Math.floor(days / 30);
+  // if (months < 12) {
+  //   return `${months}개월 전`;
+  // }
 
-  const timeLagMonth = Math.floor(tiemLag / 60 / 24 / 12);
-  if (timeLagMonth < 12) {
-    return `${tiemLagDay}개월 전`;
-  }
-
-  return `${Math.floor(tiemLagDay / 365)}년 전`;
+  return `${Math.floor(days / 365)}년 전`;
 };

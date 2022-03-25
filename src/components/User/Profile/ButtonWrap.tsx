@@ -5,6 +5,7 @@ import { GiShare } from 'react-icons/gi';
 import { FiDownload } from 'react-icons/fi';
 import { rotate } from 'styles/animations';
 import { useAppDispatch, useAppSelector } from 'store/config';
+import { getUser } from 'services/userService';
 import { getMatchList } from 'services/matchListService';
 
 export default function ButtonWrap() {
@@ -13,6 +14,7 @@ export default function ButtonWrap() {
   const dispatch = useAppDispatch();
   const handleClickRefresh = () => {
     if (user) {
+      dispatch(getUser(user.name));
       dispatch(getMatchList({ accessId: user.accessId, filter }));
     }
   };
