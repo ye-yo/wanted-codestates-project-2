@@ -99,6 +99,7 @@ interface ITableNameColumn {
 export interface IOPtions {
   offset: number;
   limit: number;
+  match_types: string;
 }
 
 export interface IUpdateMatches {

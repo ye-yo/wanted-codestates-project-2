@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 import { getMatchList } from 'services/matchListService';
 import { IParsedData, IFilter, IOPtions, IUpdateMatches } from 'interfaces/match';
 import { filtering } from 'utils/parser';
-import { DEFAULT_FILTER, DEFAULT_OPTIONS } from 'constants/match';
+import { DEFAULT_FILTER, DEFAULT_OPTIONS, MAX_OFFSET } from 'constants/match';
 
 interface MatchListStateType {
   matches: IParsedData | null;
@@ -30,10 +30,6 @@ export const matchListSlice = createSlice({
     setGameType: (state, action: PayloadAction<boolean>) => {
       const filter = { ...state.filter, isTeam: action.payload };
       state.filter = filter;
-      const currentState = current(state);
-      if (currentState.matches && state.matches) {
-        state.matches.matches = filtering(currentState.matches.originMatches, filter);
-      }
     },
     setChannel: (state, action: PayloadAction<string>) => {
       const filter = { ...state.filter, channel: action.payload };
@@ -59,6 +55,9 @@ export const matchListSlice = createSlice({
       })
       .addCase(getMatchList.fulfilled, (state, action) => {
         const { datas, options, filter }: IUpdateMatches = action.payload;
+        if (options && options?.offset > MAX_OFFSET) {
+          alert('최대 200개까지 조회할 수 있습니다.');
+        }
         if (options && state.matches) {
           const { originMatches, matches } = datas;
           const currentState = current(state);
@@ -68,11 +67,14 @@ export const matchListSlice = createSlice({
           state.matches.originMatches = [...prevOriginMatches, ...originMatches];
         } else {
           state.matches = datas;
+          state.filter = DEFAULT_FILTER;
+          state.options = DEFAULT_OPTIONS;
         }
         if (options !== undefined) state.options = options;
         if (filter !== undefined) state.filter = filter;
-        if (datas.matches.length === 0) state.isEnded = true;
-        else {
+        if (datas.matches.length === 0) {
+          state.isEnded = true;
+        } else {
           state.isEnded = false;
         }
         state.loading = false;

@@ -46,4 +46,5 @@ const Main = styled.div`
   transform: translateY(-50%);
   width: 100% !important;
   min-width: 480px;
+  font-size: 1.6rem;
 `;

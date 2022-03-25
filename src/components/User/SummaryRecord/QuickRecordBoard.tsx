@@ -14,7 +14,6 @@ function QuickRecordBoard() {
     () => getSummaryRecord(matches?.matches || null),
     [matches],
   );
-
   const customScore = (
     <CustomScore>
       {matches?.matches.length || 0}전 <span className="blue">{win || 0}승</span> <span className="red">{loose}패</span>
@@ -23,7 +22,7 @@ function QuickRecordBoard() {
 
   return (
     <RecordBoard title={title}>
-      <Wrapper loading={loading}>
+      <Wrapper loading={+loading}>
         <Box title="전적" score="20" full customScore={customScore}>
           <ProgressBar datas={datas} />
         </Box>
@@ -42,7 +41,7 @@ const Wrapper = styled.div`
   flex-flow: row wrap;
   height: 100%;
   gap: 10px;
-  opacity: ${({ loading }: { loading: boolean }) => loading && '.4'};
+  opacity: ${({ loading }: { loading: number }) => (loading ? 0.5 : 1)};
 `;
 
 interface IBox {

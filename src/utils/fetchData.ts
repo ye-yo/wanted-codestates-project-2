@@ -6,7 +6,7 @@ const fetchData = async (url: string, params?: object) => {
     const response = await axios({
       method: 'get',
       url: API_BASE_URL + url,
-      data: params,
+      params,
       headers: {
         Authorization: NEXON_TMI_KEY,
       },

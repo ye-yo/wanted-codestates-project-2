@@ -10,7 +10,6 @@ import SideRecord from './TabRecord/SideRecord';
 export default function TabRecord() {
   const { filter } = useAppSelector((state) => state.matchList);
   const dispatch = useAppDispatch();
-
   const handleChangeTab = useCallback(
     (name: string) => {
       dispatch(setChannel(name));

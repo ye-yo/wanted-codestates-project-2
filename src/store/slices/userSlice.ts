@@ -12,7 +12,7 @@ interface UserStateType {
   error: string;
   lastUpdate: string | null;
 }
-// const initialState: UserStateType = { user: null, loading: false, error: '', lastUpdate: null };
+
 const initialState: UserStateType = {
   user: {
     accessId: '604675539',
@@ -38,7 +38,9 @@ export const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        state.user = action.payload;
+        if (action.payload) {
+          state.user = action.payload;
+        }
         state.lastUpdate = new Date().toString();
         state.loading = false;
       })

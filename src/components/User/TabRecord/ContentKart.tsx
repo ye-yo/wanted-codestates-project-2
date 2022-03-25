@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { getKartList, getTrackWithKart, getIdToName } from 'utils/parser';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'store/config';
-import { NEXON_STORAGE_URL } from 'constants/env';
+import { EMPTY_KART_IMG, NEXON_STORAGE_URL } from 'constants/env';
 import { IKartRecord, IParsedMatch } from 'interfaces/match';
 import { handleKartImgError } from 'utils/common';
 import { Wrapper, Box, TitleWrap, Title, IconTrack } from './ContentTrack';
@@ -62,7 +62,11 @@ export default function ContentKart({ current, theads }: ITable) {
             )}
           </KartTitle>
           <KartDetail>
-            <img src={`${NEXON_STORAGE_URL}/kart/${currentKart?.id}.png`} onError={handleKartImgError} alt="카트" />
+            <img
+              src={`${currentKart?.id ? `${NEXON_STORAGE_URL}/kart/${currentKart?.id}.png` : EMPTY_KART_IMG}`}
+              onError={handleKartImgError}
+              alt="카트"
+            />
             <MatchRecordList>
               {currentKart &&
                 currentKart?.tracks.map((data: IParsedMatch) => (

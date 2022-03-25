@@ -3,13 +3,20 @@ import { useCallback } from 'react';
 import Toggle from 'components/Toggle';
 import { TOGGLE_COLORS } from 'constants/match';
 import { useAppSelector, useAppDispatch } from 'store/config';
-import { setGameType, setShowRetired } from 'store/slices/matchListSlice';
+import { setShowRetired } from 'store/slices/matchListSlice';
+import { getMatchList } from 'services/matchListService';
 
 export default function MatchTypeWrap() {
+  const { user } = useAppSelector((state) => state.user);
   const { filter } = useAppSelector((state) => state.matchList);
   const dispatch = useAppDispatch();
 
-  const handleClickType = () => dispatch(setGameType(!filter.isTeam));
+  const handleClickType = () => {
+    if (user) {
+      const newFilter = { ...filter, isTeam: !filter.isTeam };
+      dispatch(getMatchList({ accessId: user.accessId, filter: newFilter }));
+    }
+  };
   const handleToggle = useCallback(
     (toggle: boolean) => {
       dispatch(setShowRetired(!toggle));

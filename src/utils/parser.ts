@@ -1,5 +1,6 @@
 import {
   IMatch,
+  IMatchList,
   IParsedMatch,
   IParsedData,
   IUserData,
@@ -13,7 +14,7 @@ import gameType from 'datas/gameType.json';
 import characterData from 'datas/character.json';
 import trackData from 'datas/track.json';
 import kartData from 'datas/kart.json';
-import { CHANNEL_NAMES } from 'constants/match';
+import { CHANNEL_NAMES, INITIAL_USER_DATA, DEFAULT_PARSED_DATA } from 'constants/match';
 import { IDatas } from 'interfaces/chart';
 import { NEXON_STORAGE_URL } from 'constants/env';
 
@@ -40,18 +41,15 @@ export const getIdToName = (key: string, id: string) => {
   const target = datas.filter((data) => data.id === id);
   return target ? target[0].name : '';
 };
-const infitialUserData = {
-  character: '',
-  characterName: '',
-  license: '',
-};
-
-export const parseData = (datas: IMatch[], filter: IFilter): IParsedData => {
-  let currentUserData: IUserData = infitialUserData;
+export const parseData = (datas: IMatchList, filter: IFilter): IParsedData => {
+  if (datas.matches.length === 0) return DEFAULT_PARSED_DATA;
+  let currentUserData: IUserData = INITIAL_USER_DATA;
   const matches: IParsedMatch[] = [];
   const originMatches: IParsedMatch[] = [];
 
-  datas.forEach((match: IMatch) => {
+  const matchList = datas.matches[0].matches;
+
+  matchList.forEach((match: IMatch) => {
     const { player } = match;
     if (!player.matchRank) return;
     currentUserData = getCurrentUserData(player, currentUserData);
@@ -86,11 +84,11 @@ const extractData = (match: IMatch): IParsedMatch => {
   };
 };
 
-const IS_FASTEST = /fastest/;
-const IS_INFINIT = /infinit/;
+const IS_FASTEST = /fastest/gi;
+const IS_INFINIT = /infinit/gi;
 const getChannelType = (name: string) => {
-  if (IS_INFINIT.test(name)) return '무한부스터';
-  if (IS_FASTEST.test(name)) return '매우빠름';
+  if (name.match(IS_INFINIT)) return '무한부스터';
+  if (name.match(IS_FASTEST)) return '매우빠름';
   return '통합';
 };
 

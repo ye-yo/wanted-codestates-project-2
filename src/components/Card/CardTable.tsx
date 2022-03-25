@@ -25,7 +25,7 @@ export default function CardTable({ datas }: { datas: IParsedMatch[] }) {
         const fetchDataParams = {
           accessId: user?.accessId,
           filter,
-          options: { ...options, offset: options.offset + 1 },
+          options: { ...options, offset: options.offset + options.limit },
         };
         await dispatch(getMatchList(fetchDataParams));
         observer.observe(entry.target);
@@ -36,11 +36,11 @@ export default function CardTable({ datas }: { datas: IParsedMatch[] }) {
 
   return (
     <Table>
-      {loading && <CardUI />}
       {datas.map((data: IParsedMatch) => (
         <Card key={data.matchId} data={data} />
       ))}
       {datas.length > 0 && <Bottom ref={setRef} />}
+      {loading && <CardUI />}
     </Table>
   );
 }

@@ -64,7 +64,7 @@ export const RowUI = styled.div`
   min-height: 88px;
   position: relative;
 `;
-export const ItemUI = styled.p`
+export const ItemUI = styled.div`
   flex: 1;
   display: table-cell;
   vertical-align: middle;
