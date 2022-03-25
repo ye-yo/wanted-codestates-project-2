@@ -28,7 +28,7 @@ function Search({ size }: { size?: string }) {
     e.preventDefault();
     const value = keyword.trim();
     if (value === '') {
-      alert('검색어를 입력해주세요.');
+      // alert('검색어를 입력해주세요.');
       return;
     }
     const response = await dispatch(getUser(value));
@@ -40,7 +40,7 @@ function Search({ size }: { size?: string }) {
       }
       navigate(`/${searchOption.value}?${value}`);
     } else {
-      alert('존재하지 않는 사용자입니다.');
+      // alert('존재하지 않는 사용자입니다.');
     }
   };
 

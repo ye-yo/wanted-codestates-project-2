@@ -13,7 +13,6 @@ const fetchData = async (url: string, params?: object) => {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
     return false;
   }
 };

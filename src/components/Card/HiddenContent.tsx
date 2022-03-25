@@ -1,16 +1,19 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import styled, { css } from 'styled-components';
 import { toggleFold } from 'styles/animations';
 import { IPlayer, IMatchDetailDTO, IGameInfo } from 'interfaces/player';
 import { memo, useEffect, useState } from 'react';
 import { getPlayers, parsedPlayers } from 'utils/players';
 import { NEXON_STORAGE_URL } from 'constants/env';
+import { useAppDispatch, useAppSelector } from 'store/config';
 import { handleKartImgError } from 'utils/common';
-
-import { useAppSelector } from 'store/config';
+import { getUser } from 'services/userService';
+import { getMatchList } from 'services/matchListService';
 
 const arr = Object.freeze(['1', '2', '3', '4', '5', '6', '7', '8']);
 
 function HiddenContent({ open, matchId }: { open: boolean; matchId: string }) {
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const [players, setPlayers] = useState<IPlayer[] | null>(null);
   const [gameInfo, setGameInfo] = useState<IGameInfo>();
@@ -28,8 +31,11 @@ function HiddenContent({ open, matchId }: { open: boolean; matchId: string }) {
     }
   }, [open]);
 
-  const handleClick = (name: string) => {
-    console.log(name);
+  const handleClick = async (name: string) => {
+    const response = await dispatch(getUser(name));
+    if (response.payload) {
+      dispatch(getMatchList({ accessId: response.payload.accessId }));
+    }
   };
   return (
     <Wrapper open={open}>
@@ -68,9 +74,7 @@ function HiddenContent({ open, matchId }: { open: boolean; matchId: string }) {
                     />
                   </Cell>
                   <Cell>
-                    <p onClick={() => {}} onKeyDown={() => handleClick(players[index].characterName)}>
-                      {players[index].characterName}
-                    </p>
+                    <p onClick={() => handleClick(players[index].characterName)}>{players[index].characterName}</p>
                   </Cell>
                   <Cell> - </Cell>
                 </>
