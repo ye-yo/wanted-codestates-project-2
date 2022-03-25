@@ -56,7 +56,7 @@ export const matchListSlice = createSlice({
       .addCase(getMatchList.fulfilled, (state, action) => {
         const { datas, options, filter }: IUpdateMatches = action.payload;
         if (options && options?.offset > MAX_OFFSET) {
-          // alert('최대 200개까지 조회할 수 있습니다.');
+          return;
         }
         if (options && state.matches) {
           const { originMatches, matches } = datas;

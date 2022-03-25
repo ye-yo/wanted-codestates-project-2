@@ -12,6 +12,7 @@ import { getUser } from 'services/userService';
 import { expand } from 'styles/animations';
 import { getMatchList } from 'services/matchListService';
 import keywordList from 'utils/searchKeyword';
+import Message from 'components/Common/Message';
 import SelectType from './SelectType';
 
 const optionIcons = [<FaUserAlt />];
@@ -23,14 +24,16 @@ function Search({ size }: { size?: string }) {
   const { matchList } = useAutoSearch(keyword, keywordList.get(STORAGE_KEY));
   const [searchOption, setSearchOption] = useState<ISelectOption>(SEARCH_OPTIONS[0]);
   const optionIcon = useMemo(() => optionIcons[searchOption.id], [searchOption]);
+  const [openMessage, setOpenMessage] = useState<boolean>(false);
+
+  const handleToggleMessage = useCallback(() => {
+    setOpenMessage((openMessage) => !openMessage);
+  }, [setOpenMessage]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const value = keyword.trim();
-    if (value === '') {
-      // alert('검색어를 입력해주세요.');
-      return;
-    }
+    if (value === '') return;
     const response = await dispatch(getUser(value));
     if (response.payload) {
       keywordList.add(STORAGE_KEY, value);
@@ -40,7 +43,7 @@ function Search({ size }: { size?: string }) {
       }
       navigate(`/${searchOption.value}?${value}`);
     } else {
-      // alert('존재하지 않는 사용자입니다.');
+      handleToggleMessage();
     }
   };
 
@@ -58,6 +61,7 @@ function Search({ size }: { size?: string }) {
   const handleChangeInput = (e: { target: HTMLInputElement }) => setKeyWord(e.target.value);
   return (
     <SearchWrap size={size}>
+      {openMessage && <Message title="확인" message="일치하는 유저가 없습니다." toggleMessage={handleToggleMessage} />}
       <Form onSubmit={handleSubmit}>
         <FormItem>
           {size !== 'mini' && <SelectType options={SEARCH_OPTIONS} onChange={handleChangeType} />}
