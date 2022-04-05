@@ -8,11 +8,12 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartData,
 } from 'chart.js';
 import styled from 'styled-components';
 import { useAppSelector } from 'store/config';
 import { getRankingGraphRecord } from 'utils/parser';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import RecordBox from './RecordBoard';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -44,8 +45,8 @@ const title = { emphasis: '순위변동', text: '추이' };
 function RankingGraph() {
   const { matches } = useAppSelector((state) => state.matchList);
   const { total, latest, datas } = useMemo(() => getRankingGraphRecord(matches?.matches || null), [matches]);
-  const [chartData, setChartData] = useState<any>(null);
-  const [summary, setSummary] = useState<any>();
+  const [chartData, setChartData] = useState<ChartData<'line', (number | null)[], unknown> | null>(null);
+  const [summary, setSummary] = useState<ReactElement>();
   useEffect(() => {
     const newChartData = {
       labels: datas,

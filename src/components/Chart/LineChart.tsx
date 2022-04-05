@@ -15,8 +15,8 @@ import {
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 interface ILineChart {
-  datas: any[];
-  labels: any[];
+  datas: Object[];
+  labels: Object[];
   options: object;
 }
 
