@@ -1,11 +1,11 @@
-const get = (key: string): any => {
+const get = (key: string): Array<string> => {
   const data = localStorage.getItem(key);
   if (data) return JSON.parse(data);
   return [];
 };
 const keywordList = {
   get,
-  add: (key: string, value: any): void => {
+  add: (key: string, value: string): void => {
     const data = get(key);
     const datas = [...data];
     const isDuplicate = datas.some((word) => word === value);

@@ -1,3 +1,4 @@
+import { IDatas } from './chart';
 import { IPlayer } from './player';
 
 export interface IMatchList {
@@ -82,7 +83,7 @@ export interface ISummaryRecord {
   loose: number;
   mostMode: string;
   rankAverage: number;
-  datas: any;
+  datas: IDatas;
 }
 
 export interface IFilter {

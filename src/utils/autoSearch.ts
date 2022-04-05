@@ -61,7 +61,7 @@ const fuzzyMatcher = (input: string) => {
 
 export const getDistanceBetweenLetters = (regex: RegExp, keyword: string, matchWord: string) => {
   let totalDistance = 0;
-  matchWord.replace(regex, (match: string, ...groups: []): any => {
+  matchWord.replace(regex, (match: string, ...groups: []): string => {
     // 초성 검색 결과에서 일치하는 문자 간의 거리 계산
     const letters = groups.slice(0, keyword.length);
     let lastIndex = 0;
@@ -72,6 +72,7 @@ export const getDistanceBetweenLetters = (regex: RegExp, keyword: string, matchW
       }
       lastIndex = idx + 1;
     }
+    return match;
   });
   return totalDistance;
 };

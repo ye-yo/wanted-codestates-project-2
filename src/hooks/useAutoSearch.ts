@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import fuzzyMatcher, { getDistanceBetweenLetters } from 'utils/autoSearch';
 
-const useAutoSearch = (keyword: string, list: any[]) => {
-  const [matchList, setMatchList] = useState<any[]>([]);
+interface IMatch {
+  word: string;
+}
+const useAutoSearch = (keyword: string, list: Array<string>) => {
+  const [matchList, setMatchList] = useState<IMatch[]>([]);
   useEffect(() => {
     const regex = fuzzyMatcher(keyword);
     const newList = list.length > 0 ? filteringList(regex, keyword) : [];

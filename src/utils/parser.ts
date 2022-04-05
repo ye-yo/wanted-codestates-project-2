@@ -18,9 +18,11 @@ import { CHANNEL_NAMES, INITIAL_USER_DATA, DEFAULT_PARSED_DATA } from 'constants
 import { IDatas } from 'interfaces/chart';
 import { NEXON_STORAGE_URL } from 'constants/env';
 
+type ILocalDatas = typeof characterData | typeof trackData | typeof kartData;
+
 export const getIdToName = (key: string, id: string) => {
   if (id === '') return '';
-  let datas: any[] = [];
+  let datas: ILocalDatas = [];
   switch (key) {
     case 'character':
       datas = characterData;
@@ -240,7 +242,7 @@ export const getSummaryRecord = (matches: IParsedMatch[] | null): ISummaryRecord
       datas,
     };
   }
-  return { win: 0, loose: 0, mostMode: '', rankAverage: 0, datas: {} };
+  return { win: 0, loose: 0, mostMode: '', rankAverage: 0, datas: { data: [], color: [] } };
 };
 
 export const getRankingGraphRecord = (matches: IParsedMatch[] | null) => {

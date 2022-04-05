@@ -1,11 +1,11 @@
 export interface ITab {
-  tabs: readonly any[];
+  tabs: readonly ITabType[];
   currentTab: string;
   setCurrentTab: (name: string) => void;
 }
 
 export interface ITabType {
-  id: string;
+  id: number;
   name: string;
 }
 
