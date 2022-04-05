@@ -1,6 +1,6 @@
 import { CSSProp } from 'styled-components';
 
-type MediaQueryProps = {
+export type MediaQueryProps = {
   mobile: number;
   tablet: number;
   desktop: number;
