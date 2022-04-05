@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef, RefCallback, DependencyList } from 'react';
 
 const defaultOption = {
   root: null,
@@ -11,10 +11,15 @@ interface Option {
   threshold: typeof defaultOption.threshold;
   rootMargin: typeof defaultOption.rootMargin;
 }
-type CallbackType = (arg0: any, arg1: any) => void;
+type CallbackType = (entry: IntersectionObserverEntry, observer: IntersectionObserver) => void;
 
-const useInfiniteScroll = (doSomething: CallbackType, dependency?: any[], option?: Option) => {
-  const [ref, setRef] = useState<any>(null);
+const useInfiniteScroll = (doSomething: CallbackType, dependency?: DependencyList | undefined, option?: Option) => {
+  // const [ref, setRef] = useState<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const setRef: RefCallback<HTMLDivElement> = useCallback((node) => {
+    ref.current = node;
+  }, []);
+
   const onIntersect = useCallback(
     ([entry], observer) => {
       if (entry.isIntersecting) {
@@ -27,9 +32,9 @@ const useInfiniteScroll = (doSomething: CallbackType, dependency?: any[], option
 
   useEffect(() => {
     let observer: IntersectionObserver;
-    if (ref) {
+    if (ref && ref.current) {
       observer = new IntersectionObserver(onIntersect, { ...defaultOption, ...option });
-      observer.observe(ref);
+      observer.observe(ref.current);
     }
     return () => observer && observer.disconnect();
   }, [ref, option?.root, option?.threshold, option?.rootMargin, onIntersect]);

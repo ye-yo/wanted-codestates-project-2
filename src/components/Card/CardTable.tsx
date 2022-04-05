@@ -6,16 +6,13 @@ import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import CardUI from 'components/Skeletons/CardUI';
 import Card from './Card';
 
-type ObserverType = { unobserve: (arg0: any) => void; observe: (arg0: any) => void; disconnect: () => void };
-type EntryType = { target: any };
-
 export default function CardTable({ datas }: { datas: IParsedMatch[] }) {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const { filter, options, loading, isEnded } = useAppSelector((state) => state.matchList);
 
   const [, setRef] = useInfiniteScroll(
-    async (entry: EntryType, observer: ObserverType) => {
+    async (entry: IntersectionObserverEntry, observer: IntersectionObserver) => {
       if (isEnded && observer) {
         observer.disconnect();
         return;
